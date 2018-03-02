@@ -30,7 +30,6 @@ public class TASDatabase {
          try {
              Class.forName("com.mysql.jdbc.Driver").newInstance();
              DriverManager.getConnection(url, username,password);
-             this.stmt = conn.createStatement();
          } catch (ClassNotFoundException ex) {
              Logger.getLogger(TASDatabase.class.getName()).log(Level.SEVERE, null, ex);
          }
@@ -41,13 +40,47 @@ public class TASDatabase {
         stmt.close();
     }
     
-    public Punch getPunch(String id){
-        
+    public Punch getPunch(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        //SQL query to ask for the punch given the id
+        this.stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Punch WHERE id=id");
+        //getting things from resultset
+        if ( result != null ){
+            result.next();
+            id = result.getString("id");
+            String desc = result.getString("description");
+        }
+        return ;
     }
-    public Badge getBadge(String id){
-        
+    public Badge getBadge(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        //SQL query to ask for the punch given the id
+        this.stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Badge WHERE id=id");
+        Badge b = new Badge();
+        //getting things from resultset
+        if ( result != null ){
+            result.next();
+            id = result.getString("id");
+            String desc = result.getString("description");
+            b = new Badge(id, desc);
+        }
+        return b;
     }
-    public Shift getShift(String id){
+    public Shift getShift(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        this.stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Shift WHERE id=id");
+        Shift s = new Shift();
+        
+        if(result != null){
+            result.next();
+            id = result.getString(id);
+            String desc = result.getString("description");
+            int interval = result.getInt("interval");
+            int gracePer = result.getInt("graceperiod");
+            int dock = result.getInt("dock");
+            
+            s = new Shift(id, desc, interval, gracePer, dock, )
+        }
         
     }
     
