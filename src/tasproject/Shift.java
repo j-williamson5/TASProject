@@ -14,8 +14,23 @@ public class Shift {
     
     private int id, interval, gracePeriod, dock, deduction;
     private String description;
-    private Time startTime, stopTime, lunchStart, lunchStop;
     
+    /*
+    dallan this is matthew, Snellen said all these times need to be integers to i created the instance fields for you 
+    if you will modify the constructor cool. 
+    I just had problems with the databse with the Time data type so i went and asked him, other than that it's all good
+    */
+    
+    private int startHour;
+    private int startMin;
+    private int endHour;
+    private int endMin;
+    private int lunchStartHour;
+    private int lunchStartMin;
+    private int lunchEndHour;
+    private int lunchEndMin;
+    
+    public Shift(){}
     public Shift(int id, int interval, int gracePeriod, int dock, int deduction, String description, Time startTime, Time stopTime, Time lunchStart, Time lunchStop){
         
         this.id = id;
