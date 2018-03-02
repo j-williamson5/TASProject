@@ -5,8 +5,6 @@ package tasproject;
  * Punch.java
  * Mar 2, 2018
  */
-
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
@@ -18,8 +16,8 @@ public class Punch {
     String description;
     Badge badge = new Badge(id, description); 
      //This will probably hold HH:MM MM:DD:YY but I'm not sure yet.
-    Calendar timestamp = new GregorianCalendar(TimeZone.getDefault());
-    public Punch(Badge badge, int terminalid, int punchtypeid, Calendar timestamp) {
+    GregorianCalendar timestamp = new GregorianCalendar(TimeZone.getDefault());
+    public Punch(Badge badge, int terminalid, int punchtypeid, GregorianCalendar timestamp) {
         //TODO: Add gregoriancalendar objects for date and time of Punches. Add to args of punch constructor
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
@@ -31,16 +29,20 @@ public class Punch {
     //He also said to make sure we are using all GregorianCalendar objects instead of calendar
     public GregorianCalendar getTime() {
         GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
-        calendar.get(Calendar.YEAR);
-        calendar.get(Calendar.MONTH);
-        calendar.get(Calendar.DATE);
-        calendar.get(Calendar.HOUR);
-        calendar.get(Calendar.MINUTE);
+        calendar.get(GregorianCalendar.YEAR);
+        calendar.get(GregorianCalendar.MONTH);
+        calendar.get(GregorianCalendar.DATE);
+        calendar.get(GregorianCalendar.HOUR);
+        calendar.get(GregorianCalendar.MINUTE);
+        calendar.get(GregorianCalendar.DAY_OF_WEEK);
         return calendar;
     }
-    public Punch getPunch(String id) {
-        return null; //Assuming we will call punches by badge id here. Returning null until completed and ready for testing
-        //I think we may have to return these types of calls as a string to output. Format HH:MM MM:DD:YY
-        //Still need to check tests once added to the project by Ian
+    public String toString(Punch punch) {
+        return (badge.getID() + " CLOCKED IN: "); //Not sure how to format the data as of yet, need to follow the example below.
+    }
+    public Punch getPunch(int terminalid) {
+        return null; 
+        //Below is an example of exactly what the output from this function should look like. To string method for the first part.
+        //assertEquals("#D2C39273 CLOCKED IN: WED 09/06/2017 07:00:07", p1.printOriginalTimestamp());
     }
 }
