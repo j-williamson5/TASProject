@@ -15,11 +15,7 @@ public class Shift {
     private int id, interval, gracePeriod, dock, deduction;
     private String description;
     
-    /*
-    dallan this is matthew, Snellen said all these times need to be integers to i created the instance fields for you 
-    if you will modify the constructor cool. 
-    I just had problems with the databse with the Time data type so i went and asked him, other than that it's all good
-    */
+    
     
     private int startHour;
     private int startMin;
@@ -29,9 +25,14 @@ public class Shift {
     private int lunchStartMin;
     private int lunchEndHour;
     private int lunchEndMin;
+    /*
+    dallan this is matthew, Snellen said all these times need to be integers to i created the instance fields for you 
+    if you will modify the constructor cool. 
+    I just had problems with the databse with the Time data type so i went and asked him, other than that it's all good
+    */
     
-    public Shift(){}
-    public Shift(int id, int interval, int gracePeriod, int dock, int deduction, String description, Time startTime, Time stopTime, Time lunchStart, Time lunchStop){
+    
+    public Shift(int id, int interval, int gracePeriod, int dock, int deduction, String description, int startHour, int startMin, int endHour, int endMin, int lunchStartHour, int lunchStartMin, int lunchEndHour, int lunchEndMin){
         
         this.id = id;
         this.interval = interval;
@@ -39,10 +40,14 @@ public class Shift {
         this.dock= dock;
         this.deduction = deduction;
         this.description = description;
-        this.startTime = startTime;
-        this.stopTime = stopTime;
-        this.lunchStart = lunchStart;
-        this.lunchStop = lunchStop;
+        this.startHour = startHour;
+        this.startMin = startMin;
+        this.endHour = endHour;
+        this.endMin = endMin;
+        this.lunchStartHour = lunchStartHour;
+        this.lunchStartMin = lunchStartMin;
+        this.lunchEndHour = lunchEndHour;
+        this.lunchEndMin = lunchEndMin;
         
     }
 
@@ -94,37 +99,71 @@ public class Shift {
         this.description = description;
     }
 
-    public Time getStartTime() {
-        return startTime;
+    public int getStartHour() {
+        return startHour;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
     }
 
-    public Time getStopTime() {
-        return stopTime;
+    public int getStartMin() {
+        return startMin;
     }
 
-    public void setStopTime(Time stopTime) {
-        this.stopTime = stopTime;
+    public void setStartMin(int startMin) {
+        this.startMin = startMin;
     }
 
-    public Time getLunchStart() {
-        return lunchStart;
+    public int getEndHour() {
+        return endHour;
     }
 
-    public void setLunchStart(Time lunchStart) {
-        this.lunchStart = lunchStart;
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
     }
 
-    public Time getLunchStop() {
-        return lunchStop;
+    public int getEndMin() {
+        return endMin;
     }
 
-    public void setLunchStop(Time lunchStop) {
-        this.lunchStop = lunchStop;
+    public void setEndMin(int endMin) {
+        this.endMin = endMin;
     }
+
+    public int getLunchStartHour() {
+        return lunchStartHour;
+    }
+
+    public void setLunchStartHour(int lunchStartHour) {
+        this.lunchStartHour = lunchStartHour;
+    }
+
+    public int getLunchStartMin() {
+        return lunchStartMin;
+    }
+
+    public void setLunchStartMin(int lunchStartMin) {
+        this.lunchStartMin = lunchStartMin;
+    }
+
+    public int getLunchEndHour() {
+        return lunchEndHour;
+    }
+
+    public void setLunchEndHour(int lunchEndHour) {
+        this.lunchEndHour = lunchEndHour;
+    }
+
+    public int getLunchEndMin() {
+        return lunchEndMin;
+    }
+
+    public void setLunchEndMin(int lunchEndMin) {
+        this.lunchEndMin = lunchEndMin;
+    }
+
+    
     
     
     
