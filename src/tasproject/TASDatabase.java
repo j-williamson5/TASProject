@@ -22,10 +22,11 @@ public class TASDatabase {
         this.url = "jdbc:mysql://localhost/tas";
         this.username = "tasuser";
         this.password = "teamone";
-        establishConnections();
+        openConnection();
     }
     //Methods
-    private void establishConnections() throws SQLException, InstantiationException, IllegalAccessException{
+    //loads the JDBC Driver and connects to the SQL databse using .getConnection()
+    private void openConnection() throws SQLException, InstantiationException, IllegalAccessException{
          try {
              Class.forName("com.mysql.jdbc.Driver").newInstance();
              DriverManager.getConnection(url, username,password);
@@ -33,8 +34,23 @@ public class TASDatabase {
          } catch (ClassNotFoundException ex) {
              Logger.getLogger(TASDatabase.class.getName()).log(Level.SEVERE, null, ex);
          }
+    }
+    //closes all connections to databse and stmt
+    private void closeConnection() throws SQLException, InstantiationException, IllegalAccessException{
+        conn.close();
+        stmt.close();
+    }
+    
+    public Punch getPunch(String id){
         
     }
+    public Badge getBadge(String id){
+        
+    }
+    public Shift getShift(String id){
+        
+    }
+    
     
 
 }
