@@ -13,23 +13,25 @@ public class Punch {
     //Instance Fields (I just made the comment) - Josh
     int terminalid = 0;
     int punchtypeid = 0;
-    int year, month, day, hour, minute, second, dayOfWeek;
-    String id;
-    String description;
-    String badgeId; 
-    GregorianCalendar timestamp = new GregorianCalendar(TimeZone.getDefault());
+    int year, month, day, hour, minute, second, dayOfWeek = 0;
+    Badge badge;
+    String badgeId;
+    String badgeDescription;
+    GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
     
     //Constructor (I just made the comment) - Josh
-    public Punch(String badgeId, int terminalid, int punchtypeid, GregorianCalendar timestamp) {
+    public Punch(Badge badge, int terminalid, int punchtypeid) {
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
-        this.badgeId = badgeId; 
-        this.timestamp = getTime();
+        this.badge = badge;
+        this.badgeId = badge.getID();
+        this.badgeDescription = badge.getDescription();
     }
     
+    /* -Josh
     public GregorianCalendar getTime() {
         GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
         year = calendar.get(GregorianCalendar.YEAR);
@@ -44,15 +46,14 @@ public class Punch {
         return calendar;
     }
     
-    /*
     public String toString(Punch punch) {
         return (badge.getID() + " CLOCKED IN: "); //Not sure how to format the data as of yet, need to follow the example below.
     }
     */
     
-    //Placeholder for feature 3
+    //This is how we should print the Punches
     public String printOriginalTimestamp(){
-        return null;//Change null after feature 3
+        return null;
     }
 
     //Setters and Getters - Josh
@@ -128,38 +129,39 @@ public class Punch {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public String getId() {
-        return id;
+    public String getBadgeDescription() {
+        return badgeDescription;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBadgeDescription(String description) {
+        this.badgeDescription = description;
     }
 
-    public String getDescription() {
-        return description;
+    public Badge getBadge() {
+        return badge;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBadge(Badge badge) {
+        this.badge = badge;
     }
-
-    public String getBadge() {
+    
+    public String getBadgeId(){
         return badgeId;
     }
 
-    public void setBadge(String badge) {
-        this.badgeId = badge;
+    public GregorianCalendar getOriginalTimestamp() {
+        return originalTimeStamp;
     }
 
-    public GregorianCalendar getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(GregorianCalendar timestamp) {
-        this.timestamp = timestamp;
+    //This one takes values you give it and sets the timestamp -Josh
+    public void setOriginalTimeStamp(int year, int month, int day, int hour, int minute, int second) {
+        this.originalTimeStamp.set(year, month, day, hour, minute, second);
     }
     
+    //This one sets the timestamp to the values the class already has -Josh
+    public void setOriginalTimeStamp(){
+        this.originalTimeStamp.set(year,month,day,hour,minute,second);
+    }
     
     /*What is this??? -Josh
     public Punch getPunch(int terminalid) {
