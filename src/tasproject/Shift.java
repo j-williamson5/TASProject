@@ -10,13 +10,11 @@ package tasproject;
  * @author Dallen
  */
 import java.sql.Time;
+
 public class Shift {
     
     private int id, interval, gracePeriod, dock, deduction;
     private String description;
-    
-    
-    
     private int startHour;
     private int startMin;
     private int endHour;
@@ -28,6 +26,8 @@ public class Shift {
     
     //need this empty constructor for databse -Matthew
     public Shift(){}
+    
+    //Constructor
     public Shift(int id, int interval, int gracePeriod, int dock, int deduction, String description, int startHour, int startMin, int endHour, int endMin, int lunchStartHour, int lunchStartMin, int lunchEndHour, int lunchEndMin){
         
         this.id = id;
@@ -158,10 +158,4 @@ public class Shift {
     public void setLunchEndMin(int lunchEndMin) {
         this.lunchEndMin = lunchEndMin;
     }
-
-    
-    
-    
-    
-    
 }
