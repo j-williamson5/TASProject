@@ -15,7 +15,7 @@ public class Punch {
     int punchtypeid = 0;
     int year, month, day, hour, minute, second, dayOfWeek = 0;
     Badge badge;
-    String badgeId;
+    int badgeId;
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     
@@ -27,7 +27,7 @@ public class Punch {
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
         this.badge = badge;
-        this.badgeId = badge.getID();
+        this.badgeId = Integer.parseInt(badge.getID());
         this.badgeDescription = badge.getDescription();
     }
     
@@ -54,6 +54,8 @@ public class Punch {
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
         
+        Integer integerBadgeID = (Integer) badgeId;
+        String stringBadgeID = integerBadgeID.toString();
         //I wanted to use the table event type in TASDatabase but in there the description doesn't include the ED in CLOCKED or TIMED so this seemed easier -Josh
         String typeOfPunch;
         switch(punchtypeid){
@@ -71,7 +73,7 @@ public class Punch {
                     break;
         }
                     
-        String result = "#" + badgeId + " " + typeOfPunch + originalTimeStamp.toString();
+        String result = "#" + stringBadgeID + " " + typeOfPunch + originalTimeStamp.toString();
         return null;
     }
 
@@ -164,7 +166,7 @@ public class Punch {
         this.badge = badge;
     }
     
-    public String getBadgeId(){
+    public int getBadgeId(){
         return badgeId;
     }
 
