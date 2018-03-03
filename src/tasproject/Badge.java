@@ -43,6 +43,6 @@ public class Badge {
     
     //Formatting the output to look like the following: #D2CC71D4 (Lawson, Matthew J)
     public String toString(){
-        return "#" + this.getID() + " " + "(" + this.getDescription() + ")";
+        return "#" + id + " " + "(" + this.getDescription() + ")";
     }
 }
