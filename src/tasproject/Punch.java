@@ -16,17 +16,17 @@ public class Punch {
     int year, month, day, hour, minute, second, dayOfWeek;
     String id;
     String description;
-    Badge badge = new Badge(id, description); 
+    String badgeId; 
     GregorianCalendar timestamp = new GregorianCalendar(TimeZone.getDefault());
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
     
     //Constructor (I just made the comment) - Josh
-    public Punch(Badge badge, int terminalid, int punchtypeid, GregorianCalendar timestamp) {
+    public Punch(String badgeId, int terminalid, int punchtypeid, GregorianCalendar timestamp) {
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
-        this.badge = badge; 
+        this.badgeId = badgeId; 
         this.timestamp = getTime();
     }
     
@@ -144,12 +144,12 @@ public class Punch {
         this.description = description;
     }
 
-    public Badge getBadge() {
-        return badge;
+    public String getBadge() {
+        return badgeId;
     }
 
-    public void setBadge(Badge badge) {
-        this.badge = badge;
+    public void setBadge(String badge) {
+        this.badgeId = badge;
     }
 
     public GregorianCalendar getTimestamp() {
