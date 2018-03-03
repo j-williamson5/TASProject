@@ -9,32 +9,33 @@ package tasproject;
  *
  * @author Dallen
  */
+
 public class Badge {
+    
+    //Instance Fields
     private String id;
     private String description;
     
-    
+    //Empty Constructor for TASDatabase
     public Badge(){}
+    
+    //Constructor
     public Badge(String id, String description){
         this.id = id;
         this.description = description;
     }
     
     public String getID(){
-		return this.id;
-	}
+        return this.id;
+    }
 
 
-	public String getDescription(){
-		return this.description;
-	}
+    public String getDescription(){
+        return this.description;
+    }
 
-	
-	//Formatting the output to look like the following: #D2CC71D4 (Lawson, Matthew J)
-
-	public String toString(){
-		return "#" + this.getID() + " " + "(" + this.getDescription() + ")";
-		
-	}
-    
+    //Formatting the output to look like the following: #D2CC71D4 (Lawson, Matthew J)
+    public String toString(){
+        return "#" + this.getID() + " " + "(" + this.getDescription() + ")";
+    }
 }
