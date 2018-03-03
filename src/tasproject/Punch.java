@@ -53,6 +53,25 @@ public class Punch {
     
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
+        
+        //I wanted to use the table event type in TASDatabase but in there the description doesn't include the ED in CLOCKED or TIMED so this seemed easier -Josh
+        String typeOfPunch;
+        switch(punchtypeid){
+                case 0:
+                    typeOfPunch = "CLOCKED OUT";
+                    break;
+                case 1:
+                    typeOfPunch = "CLOCKED IN";
+                    break;
+                case 2:
+                    typeOfPunch = "TIMED OUT";
+                    break;
+                default:
+                    typeOfPunch = "";
+                    break;
+        }
+                    
+        String result = "#" + badgeId + " " + typeOfPunch + originalTimeStamp.toString();
         return null;
     }
 
