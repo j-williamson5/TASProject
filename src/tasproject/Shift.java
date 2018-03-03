@@ -23,8 +23,15 @@ public class Shift {
     private int lunchStartMin;
     private int lunchEndHour;
     private int lunchEndMin;
-    
-    //need this empty constructor for databse -Matthew
+    //-Josh
+    private Time tShiftStart = new Time(startHour,startMin,0);
+    private Time tShiftEnd = new Time(endHour,endMin,0);
+    private Time tLunchStart = new Time(lunchStartHour,lunchStartMin,0);
+    private Time tLunchEnd = new Time(lunchEndHour,lunchEndMin,0);
+    long shiftLength = tShiftEnd.getTime() - tShiftStart.getTime();
+    long lunchLength = tLunchEnd.getTime() - tLunchStart.getTime();
+            
+    //Need this empty constructor for databse -Matthew
     public Shift(){}
     
     //Constructor
@@ -47,6 +54,17 @@ public class Shift {
         
     }
 
+    @Override
+    public String toString(){
+        String returnString = this.description + ": " + tShiftStart.toString().substring(0,5) + " - " + tShiftEnd.toString().substring(0,5) + "(" + millisecondConverter(shiftLength) + "); Lunch: " + tLunchStart.toString().substring(0,5) + " - " + tLunchEnd.toString().substring(0,5) + "(" + millisecondConverter(lunchLength) + ")";
+        return returnString;
+    }
+    
+    private String millisecondConverter(long milliseconds){
+        Integer minutes = (int) (long) (milliseconds / 1000) / 60;
+        return minutes.toString();
+    }
+    //Setters and Getters
     public int getId() {
         return id;
     }
