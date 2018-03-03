@@ -130,7 +130,19 @@ public class TASDatabase {
         
     }
     
-    public Shift getShift(String badgeID){
-        return null;//Placeholder
+    public Shift getShift(String badgeID) throws SQLException{
+            
+        //SQL Query for shift
+        this.stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Employee WHERE badgeid=badgeID");
+        
+        String employeeShiftID = "";
+        //Getting things from resultset
+        if(result != null){
+            result.next();
+            employeeShiftID = result.getString("shiftid");
+        }
+        
+        return getShift(employeeShiftID);
     }
 }
