@@ -2,20 +2,25 @@
 
 /*Feature 1 Unit Test*/
 
+import java.sql.SQLException;
 import org.junit.*;
 import static org.junit.Assert.*;
+import tasproject.Badge;
+import tasproject.Punch;
+import tasproject.Shift;
+import tasproject.TASDatabase;
 
-public class Feature1 {
+public class Feature1Test {
 
     private TASDatabase db;
     
     @Before
-    public void setup() {
+    public void setup() throws SQLException, IllegalAccessException, InstantiationException {
         db = new TASDatabase();
     }
     
     @Test
-    public void testGetBadges() {
+    public void testGetBadges() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Retrieve Badges from Database */
 
@@ -32,7 +37,7 @@ public class Feature1 {
     }
     
     @Test
-    public void testGetPunches() {
+    public void testGetPunches() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Retrieve Punches from Database */
 
@@ -65,7 +70,7 @@ public class Feature1 {
     }
     
     @Test
-    public void testGetShift() {
+    public void testGetShift() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Retrieve Shift Rulesets from Database */
 
