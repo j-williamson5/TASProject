@@ -3,7 +3,6 @@
  */
 package tasproject;
 import java.sql.*;
-import java.lang.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -44,7 +43,7 @@ public class TASDatabase {
         stmt.close();
     }
     
-    public Punch getPunch(String id) throws SQLException, InstantiationException, IllegalAccessException{
+    public Punch getPunch(int id) throws SQLException, InstantiationException, IllegalAccessException{
         
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
@@ -99,7 +98,7 @@ public class TASDatabase {
         
     }
     
-    public Shift getShift(String id) throws SQLException, InstantiationException, IllegalAccessException{
+    public Shift getShift(int id) throws SQLException, InstantiationException, IllegalAccessException{
         
         //SQL Query for shift
         this.stmt = conn.createStatement();
@@ -129,5 +128,9 @@ public class TASDatabase {
         
         return s;
         
+    }
+    
+    public Shift getShift(String badgeID){
+        return null;//Placeholder
     }
 }
