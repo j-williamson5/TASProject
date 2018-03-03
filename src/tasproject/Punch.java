@@ -10,6 +10,7 @@ import java.util.TimeZone;
 
 public class Punch {
 
+    //Instance Fields (I just made the comment) - Josh
     int terminalid = 0;
     int punchtypeid = 0;
     int year, month, day, hour, minute, second, dayOfWeek;
@@ -17,6 +18,11 @@ public class Punch {
     String description;
     Badge badge = new Badge(id, description); 
     GregorianCalendar timestamp = new GregorianCalendar(TimeZone.getDefault());
+    
+    //Empty constructor for TASDatabase - Josh
+    public Punch(){};
+    
+    //Constructor (I just made the comment) - Josh
     public Punch(Badge badge, int terminalid, int punchtypeid, GregorianCalendar timestamp) {
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
