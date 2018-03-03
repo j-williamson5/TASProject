@@ -45,24 +45,35 @@ public class TASDatabase {
     }
     
     public Punch getPunch(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
         ResultSet result = stmt.executeQuery("SELECT * FROM Punch WHERE id=id");
-        //getting things from resultset
+        
+        //Initialize punch
+        Punch p = new Punch();
+        
+        //Getting things from resultset
         if ( result != null ){
             result.next();
             id = result.getString("id");
             String desc = result.getString("description");
         }
+        
         return ;
+        
     }
     
     public Badge getBadge(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
         ResultSet result = stmt.executeQuery("SELECT * FROM Badge WHERE id=id");
+        
+        //Initialize Badge to return
         Badge b = new Badge();
-        //getting things from resultset
+        
+        //Getting things from resultset
         if ( result != null ){
             result.next();
             id = result.getString("id");
@@ -70,14 +81,21 @@ public class TASDatabase {
             b.setId(id);
             b.setDescription(desc);
         }
+        
         return b;
+        
     }
     
     public Shift getShift(String id) throws SQLException, InstantiationException, IllegalAccessException{
+        
+        //SQL Query for shift
         this.stmt = conn.createStatement();
         ResultSet result = stmt.executeQuery("SELECT * FROM Shift WHERE id=id");
+        
+        //Initialize shift to return
         Shift s = new Shift();
         
+        //Getting things from resultset
         if(result != null){
             result.next();
             s.setId(result.getInt("id"));
@@ -95,10 +113,8 @@ public class TASDatabase {
             s.setLunchEndHour(result.getTime("lunchstop").getHours());
             s.setLunchEndMin(result.getTime("lunchstop").getMinutes());
         }
+        
         return s;
         
     }
-    
-    
-
 }
