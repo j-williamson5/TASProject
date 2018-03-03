@@ -48,19 +48,32 @@ public class TASDatabase {
         
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Punch WHERE id=id");
+        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE id=id");
         
         //Initialize punch
         Punch p = new Punch();
+        Badge b = new Badge();
         
         //Getting things from resultset
         if ( result != null ){
+            //Make a Time object for easy use in setters for the Punch object
+            Time timeStamp = result.getTime("originaltimestamp");
+            
             result.next();
-            id = result.getString("id");
-            String desc = result.getString("description");
+            b.setId(result.getString("badgeid"));
+            p.setBadge(b);
+            p.setTerminalid(result.getInt("terminalid"));
+            p.setPunchtypeid(result.getInt("eventtypeid"));
+            p.setYear(timeStamp.getYear());
+            p.setMonth(timeStamp.getMonth());
+            p.setDay(timeStamp.getDay());
+            p.setHour(timeStamp.getHours());
+            p.setMinute(timeStamp.getMinutes());
+            p.setSecond(timeStamp.getSeconds());
+            p.setOriginalTimeStamp();
         }
         
-        return ;
+        return p;
         
     }
     
