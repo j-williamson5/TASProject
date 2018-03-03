@@ -73,14 +73,24 @@ public class TASDatabase {
         
         if(result != null){
             result.next();
-            id = result.getString(id);
+            int idInt = result.getInt("id");
             String desc = result.getString("description");
             int interval = result.getInt("interval");
             int gracePer = result.getInt("graceperiod");
             int dock = result.getInt("dock");
-            
-            s = new Shift(id, desc, interval, gracePer, dock, )
+            int deduct = result.getInt("deduction");
+            int startH = result.getTime("start").getHours();
+            int startM = result.getTime("start").getMinutes();
+            int endH = result.getTime("stop").getHours();
+            int endM = result.getTime("stop").getMinutes();
+            int lunchStartH = result.getTime("lunchstart").getHours();
+            int lunchStartM = result.getTime("lunchstart").getMinutes();
+            int lunchEndH = result.getTime("lunchstop").getHours();
+            int lunchEndM = result.getTime("lunchstop").getMinutes();
+            // int lunchStartHour, int lunchStartMin, int lunchEndHour, int lunchEndMin
+            s = new Shift(idInt, interval, gracePer, dock, deduct, desc, startH, startM, endH, endM, lunchStartH, lunchStartM, lunchEndH, lunchEndM);
         }
+        return s;
         
     }
     
