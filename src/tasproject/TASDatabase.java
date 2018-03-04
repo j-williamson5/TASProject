@@ -31,7 +31,8 @@ public class TASDatabase {
     private void openConnection() throws SQLException, InstantiationException, IllegalAccessException{
          try {
              Class.forName("com.mysql.jdbc.Driver").newInstance();
-             DriverManager.getConnection(url, username,password);
+             conn = DriverManager.getConnection(url, username,password);
+             stmt = conn.createStatement();
          } catch (ClassNotFoundException ex) {
              Logger.getLogger(TASDatabase.class.getName()).log(Level.SEVERE, null, ex);
          }
@@ -55,21 +56,23 @@ public class TASDatabase {
         
         //Getting things from resultset
         if ( result != null ){
-            //Make a Time object for easy use in setters for the Punch object
-            Time timeStamp = result.getTime("originaltimestamp");
-            
-            result.next();
-            b.setId(result.getString("badgeid"));
-            p.setBadge(b);
-            p.setTerminalid(result.getInt("terminalid"));
-            p.setPunchtypeid(result.getInt("eventtypeid"));
-            p.setYear(timeStamp.getYear());
-            p.setMonth(timeStamp.getMonth());
-            p.setDay(timeStamp.getDay());
-            p.setHour(timeStamp.getHours());
-            p.setMinute(timeStamp.getMinutes());
-            p.setSecond(timeStamp.getSeconds());
-            p.setOriginalTimeStamp();
+            while(result.next()){
+                //Make a Time object for easy use in setters for the Punch object
+                Time timeStamp = result.getTime("originaltimestamp");
+
+                //result.next();
+                b.setId(result.getString("badgeid"));
+                p.setBadge(b);
+                p.setTerminalid(result.getInt("terminalid"));
+                p.setPunchtypeid(result.getInt("eventtypeid"));
+                p.setYear(timeStamp.getYear());
+                p.setMonth(timeStamp.getMonth());
+                p.setDay(timeStamp.getDay());
+                p.setHour(timeStamp.getHours());
+                p.setMinute(timeStamp.getMinutes());
+                p.setSecond(timeStamp.getSeconds());
+                p.setOriginalTimeStamp();
+            }
         }
         
         return p;
@@ -80,18 +83,20 @@ public class TASDatabase {
         
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Badge WHERE id=id");
+        ResultSet result = stmt.executeQuery("SELECT * FROM Badge WHERE id=" + "'" + id + "'");
         
         //Initialize Badge to return
         Badge b = new Badge();
         
         //Getting things from resultset
         if ( result != null ){
-            result.next();
-            id = result.getString("id");
-            String desc = result.getString("description");
-            b.setId(id);
-            b.setDescription(desc);
+            while(result.next()){
+                //result.next();
+                id = result.getString("id");
+                String desc = result.getString("description");
+                b.setId(id);
+                b.setDescription(desc);
+            }
         }
         
         return b;
@@ -102,28 +107,30 @@ public class TASDatabase {
         
         //SQL Query for shift
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Shift WHERE id=id");
+        ResultSet result = stmt.executeQuery("SELECT * FROM Shift WHERE id=" + "'" + id + "'");
         
         //Initialize shift to return
         Shift s = new Shift();
         
         //Getting things from resultset
         if(result != null){
-            result.next();
-            s.setId(result.getInt("id"));
-            s.setDescription(result.getString("description"));
-            s.setInterval(result.getInt("interval"));
-            s.setGracePeriod(result.getInt("graceperiod"));
-            s.setDock(result.getInt("dock"));
-            s.setDeduction(result.getInt("deduction"));
-            s.setStartHour(result.getTime("start").getHours());
-            s.setStartMin(result.getTime("start").getMinutes());
-            s.setEndHour(result.getTime("stop").getHours());
-            s.setEndMin(result.getTime("stop").getMinutes());
-            s.setLunchStartHour(result.getTime("lunchstart").getHours());
-            s.setLunchStartMin(result.getTime("lunchstart").getMinutes());
-            s.setLunchEndHour(result.getTime("lunchstop").getHours());
-            s.setLunchEndMin(result.getTime("lunchstop").getMinutes());
+            while(result.next()){
+                //result.next();
+                s.setId(result.getInt("id"));
+                s.setDescription(result.getString("description"));
+                s.setInterval(result.getInt("interval"));
+                s.setGracePeriod(result.getInt("graceperiod"));
+                s.setDock(result.getInt("dock"));
+                s.setLunchDeduct(result.getInt("lunchdeduct"));
+                s.setStartHour(result.getTime("start").getHours());
+                s.setStartMin(result.getTime("start").getMinutes());
+                s.setEndHour(result.getTime("stop").getHours());
+                s.setEndMin(result.getTime("stop").getMinutes());
+                s.setLunchStartHour(result.getTime("lunchstart").getHours());
+                s.setLunchStartMin(result.getTime("lunchstart").getMinutes());
+                s.setLunchEndHour(result.getTime("lunchstop").getHours());
+                s.setLunchEndMin(result.getTime("lunchstop").getMinutes());
+            }
         }
         
         return s;
@@ -139,10 +146,12 @@ public class TASDatabase {
         String employeeShiftID = "";
         //Getting things from resultset
         if(result != null){
-            result.next();
-            employeeShiftID = result.getString("shiftid");
+            while(result.next()){
+                result.next();
+                employeeShiftID = result.getString("shiftid");
+            }
         }
-        
+
         return getShift(employeeShiftID);
     }
 }

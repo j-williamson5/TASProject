@@ -10,7 +10,7 @@ import tasproject.Punch;
 import tasproject.Shift;
 import tasproject.TASDatabase;
 
-public class Feature1Test {
+public class Feature1 {
 
     private TASDatabase db;
     

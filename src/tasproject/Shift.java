@@ -13,7 +13,7 @@ import java.sql.Time;
 
 public class Shift {
     
-    private int id, interval, gracePeriod, dock, deduction;
+    private int id, interval, gracePeriod, dock, lunchDeduct;
     private String description;
     private int startHour;
     private int startMin;
@@ -24,24 +24,24 @@ public class Shift {
     private int lunchEndHour;
     private int lunchEndMin;
     //-Josh
-    private Time tShiftStart = new Time(startHour,startMin,0);
-    private Time tShiftEnd = new Time(endHour,endMin,0);
-    private Time tLunchStart = new Time(lunchStartHour,lunchStartMin,0);
-    private Time tLunchEnd = new Time(lunchEndHour,lunchEndMin,0);
-    long shiftLength = tShiftEnd.getTime() - tShiftStart.getTime();
-    long lunchLength = tLunchEnd.getTime() - tLunchStart.getTime();
+    private Time tShiftStart;
+    private Time tShiftEnd;
+    private Time tLunchStart;
+    private Time tLunchEnd;
+    long shiftLength;
+    long lunchLength;
             
     //Need this empty constructor for databse -Matthew
     public Shift(){}
     
     //Constructor
-    public Shift(int id, int interval, int gracePeriod, int dock, int deduction, String description, int startHour, int startMin, int endHour, int endMin, int lunchStartHour, int lunchStartMin, int lunchEndHour, int lunchEndMin){
+    public Shift(int id, int interval, int gracePeriod, int dock, int lunchDeduct, String description, int startHour, int startMin, int endHour, int endMin, int lunchStartHour, int lunchStartMin, int lunchEndHour, int lunchEndMin){
         
         this.id = id;
         this.interval = interval;
         this.gracePeriod = gracePeriod;
         this.dock= dock;
-        this.deduction = deduction;
+        this.lunchDeduct = lunchDeduct;
         this.description = description;
         this.startHour = startHour;
         this.startMin = startMin;
@@ -51,19 +51,29 @@ public class Shift {
         this.lunchStartMin = lunchStartMin;
         this.lunchEndHour = lunchEndHour;
         this.lunchEndMin = lunchEndMin;
-        
+        establishTimeObjects();
     }
-
+    
+    private void establishTimeObjects(){
+        this.tShiftStart = new Time(startHour,startMin,0);
+        this.tShiftEnd = new Time(endHour,endMin,0);
+        this.tLunchStart = new Time(lunchStartHour,lunchStartMin,0);
+        this.tLunchEnd = new Time(lunchEndHour,lunchEndMin,0);
+        this.shiftLength = this.tShiftEnd.getTime() - this.tShiftStart.getTime();
+        this.lunchLength = this.tLunchEnd.getTime() - this.tLunchStart.getTime();
+    }
+    
     @Override
     public String toString(){
-        String returnString = this.description + ": " + tShiftStart.toString().substring(0,5) + " - " + tShiftEnd.toString().substring(0,5) + "(" + millisecondConverter(shiftLength) + "); Lunch: " + tLunchStart.toString().substring(0,5) + " - " + tLunchEnd.toString().substring(0,5) + "(" + millisecondConverter(lunchLength) + ")";
+        String returnString = description + ": " + tShiftStart.toString().substring(0,5) + " - " + tShiftEnd.toString().substring(0,5) + "(" + millisecondConverter(shiftLength) + "); Lunch: " + tLunchStart.toString().substring(0,5) + " - " + tLunchEnd.toString().substring(0,5) + "(" + millisecondConverter(lunchLength) + ")";
         return returnString;
     }
     
     private String millisecondConverter(long milliseconds){
-        Integer minutes = (int) (long) (milliseconds / 1000) / 60;
-        return minutes.toString();
+        String result = String.valueOf((milliseconds / 1000) / 60);
+        return result;
     }
+    
     //Setters and Getters
     public int getId() {
         return id;
@@ -97,12 +107,12 @@ public class Shift {
         this.dock = dock;
     }
 
-    public int getDeduction() {
-        return deduction;
+    public int getLunchDeduct() {
+        return lunchDeduct;
     }
 
-    public void setDeduction(int deduction) {
-        this.deduction = deduction;
+    public void setLunchDeduct(int lunchDeduct) {
+        this.lunchDeduct = lunchDeduct;
     }
 
     public String getDescription() {
