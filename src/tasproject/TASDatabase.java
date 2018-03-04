@@ -127,14 +127,12 @@ public class TASDatabase {
                 s.setGracePeriod(result.getInt("graceperiod"));
                 s.setDock(result.getInt("dock"));
                 s.setLunchDeduct(result.getInt("lunchdeduct"));
-                s.setStartHour(result.getTime("start").getHours());
-                s.setStartMin(result.getTime("start").getMinutes());
-                s.setEndHour(result.getTime("stop").getHours());
-                s.setEndMin(result.getTime("stop").getMinutes());
-                s.setLunchStartHour(result.getTime("lunchstart").getHours());
-                s.setLunchStartMin(result.getTime("lunchstart").getMinutes());
-                s.setLunchEndHour(result.getTime("lunchstop").getHours());
-                s.setLunchEndMin(result.getTime("lunchstop").getMinutes());
+                s.setStartTime(result.getTime("start"));
+                s.setStopTime(result.getTime("stop"));
+                s.setLunchStart(result.getTime("lunchstart"));
+                s.setLunchStop(result.getTime("lunchstop"));
+                s.setShiftLength(s.getStopTime().getTime() - s.getStartTime().getTime());
+                s.setLunchLength(s.getLunchStop().getTime() - s.getLunchStart().getTime());
             }
         }
         
