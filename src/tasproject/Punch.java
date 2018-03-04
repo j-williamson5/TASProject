@@ -5,7 +5,10 @@ package tasproject;
  * Punch.java
  * Mar 2, 2018
  */
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class Punch {
@@ -53,9 +56,10 @@ public class Punch {
     
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
+ 
+        SimpleDateFormat date = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss");
+        String stringDate = date.format(originalTimeStamp.getTime());
         
-        Integer integerBadgeID = (Integer) badgeId;
-        String stringBadgeID = integerBadgeID.toString();
         //I wanted to use the table event type in TASDatabase but in there the description doesn't include the ED in CLOCKED or TIMED so this seemed easier -Josh
         String typeOfPunch;
         switch(punchtypeid){
@@ -73,8 +77,8 @@ public class Punch {
                     break;
         }
                     
-        String result = "#" + stringBadgeID + " " + typeOfPunch + originalTimeStamp.toString();
-        return null;
+        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase();
+        return result;
     }
 
     //Setters and Getters - Josh
@@ -184,6 +188,9 @@ public class Punch {
         this.originalTimeStamp.set(year,month,day,hour,minute,second);
     }
     
+    public void setOriginalTimeStamp(GregorianCalendar time){
+        this.originalTimeStamp = time;
+    }
     /*What is this??? -Josh
     public Punch getPunch(int terminalid) {
         return null; 

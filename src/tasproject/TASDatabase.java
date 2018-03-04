@@ -3,6 +3,11 @@
  */
 package tasproject;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -44,11 +49,13 @@ public class TASDatabase {
         stmt.close();
     }
     
-    public Punch getPunch(int id) throws SQLException, InstantiationException, IllegalAccessException{
+    public Punch getPunch(int id) throws SQLException, InstantiationException, IllegalAccessException, IllegalArgumentException{
         
         //SQL query to ask for the punch given the id
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE id=id");
+        Integer integerID = (Integer) id;
+        String stringID = integerID.toString();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE id=" + "'" + stringID + "'");
         
         //Initialize punch
         Punch p = new Punch();
@@ -58,20 +65,18 @@ public class TASDatabase {
         if ( result != null ){
             while(result.next()){
                 //Make a Time object for easy use in setters for the Punch object
-                Time timeStamp = result.getTime("originaltimestamp");
+                Timestamp timeStamp = result.getTimestamp("originaltimestamp");
+                LocalDateTime dateTime = timeStamp.toLocalDateTime();
+                ZoneId zone = TimeZone.getDefault().toZoneId();
+                ZonedDateTime zoneDateTime = dateTime.atZone(zone);
+                GregorianCalendar time = GregorianCalendar.from(zoneDateTime);
 
                 //result.next();
                 b.setId(result.getString("badgeid"));
                 p.setBadge(b);
                 p.setTerminalid(result.getInt("terminalid"));
                 p.setPunchtypeid(result.getInt("eventtypeid"));
-                p.setYear(timeStamp.getYear());
-                p.setMonth(timeStamp.getMonth());
-                p.setDay(timeStamp.getDay());
-                p.setHour(timeStamp.getHours());
-                p.setMinute(timeStamp.getMinutes());
-                p.setSecond(timeStamp.getSeconds());
-                p.setOriginalTimeStamp();
+                p.setOriginalTimeStamp(time);
             }
         }
         
