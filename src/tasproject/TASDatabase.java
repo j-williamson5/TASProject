@@ -3,6 +3,7 @@
  */
 package tasproject;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -156,5 +157,36 @@ public class TASDatabase {
         }
 
         return getShift(employeeShiftID);
+    }
+    
+    public int insertPunch(Punch p) throws SQLException{
+        
+        //SQL Query for punch
+        int key = 0, result = 0;
+        ResultSet keys = null;
+        String sql =("INSERT INTO event (badgeid, originaltimestamp, terminalid, eventtypeid) VALUES (?,?,?,?)");
+        PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        
+        //Vatiables for inserting into database
+        int id;
+        int terminalID = p.getTerminalid();
+        String badgeID = p.getBadgeId();
+        GregorianCalendar originalTimeStamp = p.getOriginalTimestamp();
+        int eventtypeid = p.getPunchtypeid();
+        String eventdata = p.getEventData();
+        
+        ps.setString(1, badgeID);
+        ps.setString(2, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(originalTimeStamp.getTime()));
+        ps.setInt(3,terminalID);
+        ps.setInt(4, eventtypeid);
+        
+        result = ps.executeUpdate();
+        if (result == 1) {
+            keys = ps.getGeneratedKeys();
+        }
+        if (keys.next()) {
+            key = keys.getInt(1);
+        }
+        return key;
     }
 }

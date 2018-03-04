@@ -18,24 +18,35 @@ public class Punch {
     int punchtypeid = 0;
     int year, month, day, hour, minute, second, dayOfWeek = 0;
     Badge badge;
-    int badgeId;
+    String badgeId;
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
+    String eventData = null;
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
     
-    //Constructor (I just made the comment) - Josh
+    //Constructors
+    public Punch(String badgeId, int terminalid, int punchtypeid){
+        this.terminalid = terminalid;
+        this.punchtypeid = punchtypeid;
+        this.badge = new Badge(badgeId,null);
+        this.badgeId = badgeId;
+        this.badgeDescription = badge.getDescription();
+        this.originalTimeStamp = defaultTime();
+        System.out.println("OTHER CONSTRUCTOR");
+    }
+    
     public Punch(Badge badge, int terminalid, int punchtypeid) {
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
         this.badge = badge;
-        this.badgeId = Integer.parseInt(badge.getID());
+        this.badgeId = badge.getID();
         this.badgeDescription = badge.getDescription();
+        this.originalTimeStamp = defaultTime();
     }
     
-    /* -Josh
-    public GregorianCalendar getTime() {
+    public GregorianCalendar defaultTime() {
         GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
         year = calendar.get(GregorianCalendar.YEAR);
         month = calendar.get(GregorianCalendar.MONTH);
@@ -48,12 +59,11 @@ public class Punch {
         //calendar.set(DAY_OF_WEEK, dayOfWeek); currently not working, unsure how to implement as of yet. 
         return calendar;
     }
-    
+    /*
     public String toString(Punch punch) {
         return (badge.getID() + " CLOCKED IN: "); //Not sure how to format the data as of yet, need to follow the example below.
     }
     */
-    
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
  
@@ -170,7 +180,9 @@ public class Punch {
         this.badge = badge;
     }
     
-    public int getBadgeId(){
+    public String getBadgeId(){
+        System.out.println("Badge's ID is: " + badge.getID());
+        System.out.println("My ID is: " + badgeId);
         return badgeId;
     }
 
@@ -190,6 +202,14 @@ public class Punch {
     
     public void setOriginalTimeStamp(GregorianCalendar time){
         this.originalTimeStamp = time;
+    }
+    
+    public String getEventData(){
+        return this.eventData;
+    }
+    
+    public void setEventData(String eventData){
+        this.eventData = eventData;
     }
     /*What is this??? -Josh
     public Punch getPunch(int terminalid) {
