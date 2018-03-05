@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -192,15 +193,42 @@ public class TASDatabase {
     }
     
     public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException{
-        //lisst to return
+        //list to return
         ArrayList <Punch> resultList = new ArrayList<>();
         
         //sql statement and query for daily punch list
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE ");
+        //retreiving the timestamp from database that belong to the badgeid given
+        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE badgeid = " + "'"+ b +"'");
         
+        //get day from gregorian calendar
+        long milliTime = ts.getTimeInMillis();
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(milliTime);
+        int dayGiven = c.get(Calendar.DAY_OF_MONTH);
         
+        //iterating througt the results
+        if(result != null){
+            while(result.next()){
+                result.next();
+                //get day from timestamp that the query returned
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(result.getLong("originaltimestamp"));
+                int dayRetreived = cal.get(Calendar.DAY_OF_MONTH);
+                
+                //if the days are the same we want to return all this badgeid's punches
+                //punch takes badgeid, terminalid, and punchtypeid
+                if(dayGiven == dayRetreived){
+                    //creating and adding the punches to the list to return
+                    Punch p = new Punch(result.getString("badgeid"), result.getInt("terminalid"), result.getInt("eventtypeid"));
+                    resultList.add(p);
+                    
+                }//end if day given equals day retreived
+            }//end while
+        }//end if result is not null
         
         return resultList;
-    }
-}
+        
+    }//end arrraylist method
+    
+}//end class
