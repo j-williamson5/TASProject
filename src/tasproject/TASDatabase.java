@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -188,5 +189,18 @@ public class TASDatabase {
             key = keys.getInt(1);
         }
         return key;
+    }
+    
+    public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException{
+        //lisst to return
+        ArrayList <Punch> resultList = new ArrayList<>();
+        
+        //sql statement and query for daily punch list
+        this.stmt = conn.createStatement();
+        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE ");
+        
+        
+        
+        return resultList;
     }
 }
