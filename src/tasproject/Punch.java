@@ -5,12 +5,19 @@ package tasproject;
  * Punch.java
  * Mar 2, 2018
  */
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class Punch {
 
+    //Constants - Feel free to rename as neccesary just putting stuff in really quick before class
+    //We will also implement a rule that excludes weekend shifts from all rules, as there are no scheduled hours for weekends. 
+    int adjustPeriod; // The window of time in which early or late punches are adjusted to the start of a shift (originally 15 mins)
+    int gracePeriod; // The window of time (originally 5 minutes) where an employees time will not be adjusted
+    int dock; // The penalty to assess for being too early or tardy (originally 15 mins)
+    
     //Instance Fields (I just made the comment) - Josh
     int terminalid = 0;
     int punchtypeid = 0;
@@ -20,6 +27,12 @@ public class Punch {
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     String eventData = null;
+    
+    //Instance fields for time; Seperating in case I have to change later
+    private Time startTime = new Time(0);
+    private Time stopTime = new Time(0);
+    private Time lunchStart = new Time(0);
+    private Time lunchStop = new Time(0);
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
@@ -81,6 +94,13 @@ public class Punch {
                     
         String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase();
         return result;
+    }
+    //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
+    public void adjust(Shift s) {
+        startTime = s.getStartTime();
+        stopTime = s.getStopTime();
+        lunchStart = s.getLunchStart();
+        lunchStop = s.getLunchStop();
     }
 
     //Setters and Getters - Josh
