@@ -37,7 +37,7 @@ public class Feature2 {
         /* Retrieve New Punch */
         
         Punch p2 = db.getPunch(punchid);
-        /*
+        
         //Manual Compare Punches
         String timeStamp =  (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(p2.getOriginalTimestamp().getTime());
         Badge badge = p2.getBadge();
@@ -49,7 +49,7 @@ public class Feature2 {
         System.out.println("EXPECTED: " + terminalid);
         System.out.println("OURS: " + p2.getPunchtypeid());
         System.out.println("EXPECTED: " + eventtypeid);
-        */
+        
         /* Compare Punches */
         assertEquals(badgeid, p2.getBadgeId());
         assertEquals(originaltimestamp, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(p2.getOriginalTimestamp().getTime()));

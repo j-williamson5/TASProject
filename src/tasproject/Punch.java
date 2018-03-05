@@ -6,9 +6,7 @@ package tasproject;
  * Mar 2, 2018
  */
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class Punch {
@@ -30,7 +28,7 @@ public class Punch {
     public Punch(String badgeId, int terminalid, int punchtypeid){
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
-        this.badge = new Badge(badgeId,null);
+        this.badge = new Badge(badgeId,"");
         this.badgeId = badgeId;
         this.badgeDescription = badge.getDescription();
         this.originalTimeStamp = defaultTime();
@@ -55,15 +53,9 @@ public class Punch {
         minute = calendar.get(GregorianCalendar.MINUTE);
         dayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
         calendar.set(year, month, day, hour, minute, second);
-        //Can possibly replace month above as a string and use getDisplayName(); 
-        //calendar.set(DAY_OF_WEEK, dayOfWeek); currently not working, unsure how to implement as of yet. 
         return calendar;
     }
-    /*
-    public String toString(Punch punch) {
-        return (badge.getID() + " CLOCKED IN: "); //Not sure how to format the data as of yet, need to follow the example below.
-    }
-    */
+
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
  
@@ -211,11 +203,4 @@ public class Punch {
     public void setEventData(String eventData){
         this.eventData = eventData;
     }
-    /*What is this??? -Josh
-    public Punch getPunch(int terminalid) {
-        return null; 
-        //Below is an example of exactly what the output from this function should look like. To string method for the first part.
-        //assertEquals("#D2C39273 CLOCKED IN: WED 09/06/2017 07:00:07", p1.printOriginalTimestamp());
-    }
-    */
 }
