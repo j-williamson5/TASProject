@@ -10,7 +10,6 @@ package tasproject;
  * @author Dallen
  */
 import java.sql.Time;
-import java.time.LocalTime;
 
 public class Shift {
     
@@ -47,7 +46,6 @@ public class Shift {
     private String millisecondConverter(long milliseconds){
         long minutes = (milliseconds/1000) / 60;
         String result = String.valueOf(minutes);
-        System.out.println(String.valueOf(shiftLength));
         return result;
     }
     

@@ -30,7 +30,7 @@ public class Punch {
     public Punch(String badgeId, int terminalid, int punchtypeid){
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
-        this.badge = new Badge(badgeId,null);
+        this.badge = new Badge(badgeId,"");
         this.badgeId = badgeId;
         this.badgeDescription = badge.getDescription();
         this.originalTimeStamp = defaultTime();
