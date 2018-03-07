@@ -7,6 +7,7 @@ package tasproject;
  */
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
@@ -83,12 +84,29 @@ public class Punch {
         return result;
         
     }
+    
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
     public void adjust(Shift s) {
         startTime = s.getStartTime();
         stopTime = s.getStopTime();
         lunchStart = s.getLunchStart();
         lunchStop = s.getLunchStop();
+        
+        //getting the day of the week from the punch timestamp
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(originalTimeStamp.getTimeInMillis());
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        
+        int min =  cal.get(Calendar.MINUTE);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        
+        if(day == 1 || day == 7){
+            
+        }
+        else{
+            
+        }
+        
     }
 
     //Setters and Getters - Josh

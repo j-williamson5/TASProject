@@ -35,7 +35,7 @@ public class Feature2 {
         /* Retrieve New Punch */
         
         Punch p2 = db.getPunch(punchid);
-		
+        
         /* Compare Punches */
 
         assertEquals(badgeid, p2.getBadgeid());
