@@ -81,6 +81,7 @@ public class Punch {
                     
         String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase();
         return result;
+        
     }
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
     public void adjust(Shift s) {
