@@ -1,7 +1,3 @@
-
-
-/*Feature 1 Unit Test*/
-
 import java.sql.SQLException;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -15,7 +11,7 @@ public class Feature1 {
     private TASDatabase db;
     
     @Before
-    public void setup() throws SQLException, IllegalAccessException, InstantiationException {
+    public void setup() throws SQLException, InstantiationException, IllegalAccessException {
         db = new TASDatabase();
     }
     
@@ -87,7 +83,6 @@ public class Feature1 {
     }
 
 }
-
 
 
 

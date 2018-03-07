@@ -18,12 +18,11 @@ public class Punch {
     int gracePeriod; // The window of time (originally 5 minutes) where an employees time will not be adjusted
     int dock; // The penalty to assess for being too early or tardy (originally 15 mins)
     
-    //Instance Fields (I just made the comment) - Josh
+    //Instance Fields
     int terminalid = 0;
     int punchtypeid = 0;
-    int year, month, day, hour, minute, second, dayOfWeek = 0;
     Badge badge;
-    String badgeId;
+    String badgeid;
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     String eventData = null;
@@ -38,36 +37,23 @@ public class Punch {
     public Punch(){};
     
     //Constructors
+     public Punch(Badge badge, int terminalid, int punchtypeid) {
+        this.terminalid = terminalid;
+        this.punchtypeid = punchtypeid;
+        this.badge = badge;
+        this.badgeid = badge.getID();
+        this.badgeDescription = badge.getDescription();
+    }
+     
     public Punch(String badgeId, int terminalid, int punchtypeid){
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
         this.badge = new Badge(badgeId,"");
-        this.badgeId = badgeId;
+        this.badgeid = badgeId;
         this.badgeDescription = badge.getDescription();
-        this.originalTimeStamp = defaultTime();
-        System.out.println("OTHER CONSTRUCTOR");
     }
     
-    public Punch(Badge badge, int terminalid, int punchtypeid) {
-        this.terminalid = terminalid;
-        this.punchtypeid = punchtypeid;
-        this.badge = badge;
-        this.badgeId = badge.getID();
-        this.badgeDescription = badge.getDescription();
-        this.originalTimeStamp = defaultTime();
-    }
-    
-    public GregorianCalendar defaultTime() {
-        GregorianCalendar calendar = new GregorianCalendar(TimeZone.getDefault());
-        year = calendar.get(GregorianCalendar.YEAR);
-        month = calendar.get(GregorianCalendar.MONTH);
-        day = calendar.get(GregorianCalendar.DATE);
-        hour = calendar.get(GregorianCalendar.HOUR);
-        minute = calendar.get(GregorianCalendar.MINUTE);
-        dayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
-        calendar.set(year, month, day, hour, minute, second);
-        return calendar;
-    }
+
 
     //This is how we should print the Punches
     public String printOriginalTimestamp(){
@@ -120,62 +106,6 @@ public class Punch {
         this.punchtypeid = punchtypeid;
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-    public int getMinute() {
-        return minute;
-    }
-
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
-
-    public int getSecond() {
-        return second;
-    }
-
-    public void setSecond(int second) {
-        this.second = second;
-    }
-
-    public int getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(int dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
     public String getBadgeDescription() {
         return badgeDescription;
     }
@@ -192,13 +122,14 @@ public class Punch {
         this.badge = badge;
     }
     
-    public String getBadgeId(){
-        System.out.println("Badge's ID is: " + badge.getID());
-        System.out.println("My ID is: " + badgeId);
-        return badgeId;
+    public void setBadgeId(String badgeId){
+        this.badgeid = badgeId;
+    }
+    public String getBadgeid(){
+        return badgeid;
     }
 
-    public GregorianCalendar getOriginalTimestamp() {
+    public GregorianCalendar getOriginaltimestamp() {
         return originalTimeStamp;
     }
 
@@ -208,10 +139,6 @@ public class Punch {
     }
     
     //This one sets the timestamp to the values the class already has -Josh
-    public void setOriginalTimeStamp(){
-        this.originalTimeStamp.set(year,month,day,hour,minute,second);
-    }
-    
     public void setOriginalTimeStamp(GregorianCalendar time){
         this.originalTimeStamp = time;
     }

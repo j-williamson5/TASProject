@@ -77,6 +77,7 @@ public class TASDatabase {
                 //result.next();
                 b.setId(result.getString("badgeid"));
                 p.setBadge(b);
+                p.setBadgeId(result.getString("badgeid"));
                 p.setTerminalid(result.getInt("terminalid"));
                 p.setPunchtypeid(result.getInt("eventtypeid"));
                 p.setOriginalTimeStamp(time);
@@ -172,10 +173,11 @@ public class TASDatabase {
         //Vatiables for inserting into database
         int id;
         int terminalID = p.getTerminalid();
-        String badgeID = p.getBadgeId();
-        GregorianCalendar originalTimeStamp = p.getOriginalTimestamp();
+        String badgeID = p.getBadgeid();
+        GregorianCalendar originalTimeStamp = p.getOriginaltimestamp();
         int eventtypeid = p.getPunchtypeid();
         String eventdata = p.getEventData();
+        System.out.println("The ID being entered into the database is: " + badgeID);
         
         ps.setString(1, badgeID);
         ps.setString(2, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(originalTimeStamp.getTime()));
@@ -183,6 +185,7 @@ public class TASDatabase {
         ps.setInt(4, eventtypeid);
         
         result = ps.executeUpdate();
+        System.out.println("Result: " + ps);
         if (result == 1) {
             keys = ps.getGeneratedKeys();
         }
