@@ -1,19 +1,21 @@
+import java.sql.SQLException;
 import org.junit.*;
 import static org.junit.Assert.*;
 import tasproject.Punch;
 import tasproject.Shift;
+import tasproject.TASDatabase;
 
 public class Feature3 {
     
     private TASDatabase db;
     
     @Before
-    public void setup() {
+    public void setup() throws SQLException, InstantiationException, IllegalAccessException {
         db = new TASDatabase();
     }
     
     @Test
-    public void testAdjustPunchesShift1Weekday() {
+    public void testAdjustPunchesShift1Weekday() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Get Shift Ruleset and Punch Data */
         
@@ -48,7 +50,7 @@ public class Feature3 {
     }
 
     @Test
-    public void testAdjustPunchesShift1Weekend() {
+    public void testAdjustPunchesShift1Weekend() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Get Shift Ruleset and Punch Data */
         
@@ -73,7 +75,7 @@ public class Feature3 {
     }
     
     @Test
-    public void testAdjustPunchesShift2Weekday() {
+    public void testAdjustPunchesShift2Weekday() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Get Shift Ruleset and Punch Data */
         
@@ -98,7 +100,7 @@ public class Feature3 {
     }
     
     @Test
-    public void testAdjustPunchesShift2Weekend() {
+    public void testAdjustPunchesShift2Weekend() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Get Shift Ruleset and Punch Data */
         
@@ -123,7 +125,7 @@ public class Feature3 {
     }
     
     @Test
-    public void testAdjustPunchesShift1SpecialCases() {
+    public void testAdjustPunchesShift1SpecialCases() throws SQLException, InstantiationException, IllegalAccessException {
 		
         /* Get Shift Ruleset and Punch Data */
         
