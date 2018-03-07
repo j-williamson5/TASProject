@@ -25,6 +25,7 @@ public class Punch {
     String badgeid;
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
+    GregorianCalendar adjustedTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     String eventData = null;
     
     //Instance fields for time; Seperating in case I have to change later
