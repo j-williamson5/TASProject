@@ -13,12 +13,6 @@ import java.util.TimeZone;
 
 public class Punch {
 
-    //Constants - Feel free to rename as neccesary just putting stuff in really quick before class
-    //We will also implement a rule that excludes weekend shifts from all rules, as there are no scheduled hours for weekends. 
-    int adjustPeriod; // The window of time in which early or late punches are adjusted to the start of a shift (originally 15 mins)
-    int gracePeriod; // The window of time (originally 5 minutes) where an employees time will not be adjusted
-    int dock; // The penalty to assess for being too early or tardy (originally 15 mins)
-    
     //Instance Fields
     int terminalid = 0;
     int punchtypeid = 0;
@@ -121,13 +115,16 @@ public class Punch {
         long lunchStartMinutes = millisToMinutes(lunchStart.getTime());
         long lunchStopHours = millisToHours(lunchStop.getTime());
         long lunchStopMinutes = millisToMinutes(lunchStop.getTime());
-        
+        int interval = s.getInterval();
+        int dock = s.getDock();
+        int gracePeriod = s.getGracePeriod();
         
         //getting the day of the week from the punch timestamp
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(originalTimeStamp.getTimeInMillis());
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_WEEK);
-        
         int min =  cal.get(Calendar.MINUTE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         
@@ -142,6 +139,22 @@ public class Punch {
             //If the punch is a clock in punch
             else if(punchtypeid == 1){
                 
+                //If the punch occured after the shift start
+                if((millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) < 0)){
+                     //If the punch is within the grace period
+                    if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
+                        adjustedTimeStamp.set(year,month,day, , );//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
+                    }
+                    //If the punch is after the grace period but before the dock
+                    else if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < dock){
+                        adjustedTimeStamp.set(year,month,day,)
+                    }
+                }
+                else{
+                    if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <  interval && millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) >= 0){//We want it before the interval but if it's less than 0 than that means that the punch occured after the shift started
+                        adjustedTimeStamp.set(year,month,day, , );//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
+                    }
+                }
             }
         }
         
