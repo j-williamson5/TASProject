@@ -29,11 +29,10 @@ public class Punch {
     GregorianCalendar adjustedTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     String eventData = null;
     
-    //Instance fields for time; Seperating in case I have to change later
-    private Time startTime = new Time(0);
-    private Time stopTime = new Time(0);
-    private Time lunchStart = new Time(0);
-    private Time lunchStop = new Time(0);
+    private static final int SECOND = 1000;
+    private static final int MINUTE = 60 * SECOND;
+    private static final int HOUR = 60 * MINUTE;
+    private static final int DAY = 24 * HOUR;
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
@@ -85,12 +84,44 @@ public class Punch {
         
     }
     
+    public long millisToHours(long ms){
+        if (ms > DAY) {
+            ms %= DAY;
+          }
+        if (ms > HOUR) {
+            ms %= HOUR;
+          }
+        return ms;
+    }
+    
+    public long millisToMinutes(long ms){
+        if (ms > DAY) {
+            ms %= DAY;
+          }
+        if (ms > HOUR) {
+            ms %= HOUR;
+          }
+        if (ms > MINUTE) {
+            ms %= MINUTE;
+          }
+        return ms;
+    }
+    
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
     public void adjust(Shift s) {
-        startTime = s.getStartTime();
-        stopTime = s.getStopTime();
-        lunchStart = s.getLunchStart();
-        lunchStop = s.getLunchStop();
+        Time startTime = s.getStartTime();
+        Time stopTime = s.getStopTime();
+        Time lunchStart = s.getLunchStart();
+        Time lunchStop = s.getLunchStop();
+        long startTimeHours = millisToHours(startTime.getTime());
+        long startTimeMinutes = millisToMinutes(startTime.getTime());
+        long stopTimeHours = millisToHours(stopTime.getTime());
+        long stopTimeMinutes = millisToMinutes(stopTime.getTime());
+        long lunchStartHours = millisToHours(lunchStart.getTime());
+        long lunchStartMinutes = millisToMinutes(lunchStart.getTime());
+        long lunchStopHours = millisToHours(lunchStop.getTime());
+        long lunchStopMinutes = millisToMinutes(lunchStop.getTime());
+        
         
         //getting the day of the week from the punch timestamp
         Calendar cal = Calendar.getInstance();
@@ -104,7 +135,14 @@ public class Punch {
             
         }
         else{
-            
+            //If the punch is a clock out punch
+            if(punchtypeid == 0){
+                
+            }
+            //If the punch is a clock in punch
+            else if(punchtypeid == 1){
+                
+            }
         }
         
     }
