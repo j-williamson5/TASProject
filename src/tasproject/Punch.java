@@ -78,17 +78,17 @@ public class Punch {
         
     }
     
-    public long millisToHours(long ms){
+    public int millisToHours(long ms){
         if (ms > DAY) {
             ms %= DAY;
           }
         if (ms > HOUR) {
             ms %= HOUR;
           }
-        return ms;
+        return (int) ms;
     }
     
-    public long millisToMinutes(long ms){
+    public int millisToMinutes(long ms){
         if (ms > DAY) {
             ms %= DAY;
           }
@@ -98,7 +98,7 @@ public class Punch {
         if (ms > MINUTE) {
             ms %= MINUTE;
           }
-        return ms;
+        return (int) ms;
     }
     
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
@@ -107,14 +107,14 @@ public class Punch {
         Time stopTime = s.getStopTime();
         Time lunchStart = s.getLunchStart();
         Time lunchStop = s.getLunchStop();
-        long startTimeHours = millisToHours(startTime.getTime());
-        long startTimeMinutes = millisToMinutes(startTime.getTime());
-        long stopTimeHours = millisToHours(stopTime.getTime());
-        long stopTimeMinutes = millisToMinutes(stopTime.getTime());
-        long lunchStartHours = millisToHours(lunchStart.getTime());
-        long lunchStartMinutes = millisToMinutes(lunchStart.getTime());
-        long lunchStopHours = millisToHours(lunchStop.getTime());
-        long lunchStopMinutes = millisToMinutes(lunchStop.getTime());
+        int startTimeHours = millisToHours(startTime.getTime());
+        int  startTimeMinutes = millisToMinutes(startTime.getTime());
+        int stopTimeHours = millisToHours(stopTime.getTime());
+        int stopTimeMinutes = millisToMinutes(stopTime.getTime());
+        int lunchStartHours = millisToHours(lunchStart.getTime());
+        int lunchStartMinutes = millisToMinutes(lunchStart.getTime());
+        int lunchStopHours = millisToHours(lunchStop.getTime());
+        int lunchStopMinutes = millisToMinutes(lunchStop.getTime());
         int interval = s.getInterval();
         int dock = s.getDock();
         int gracePeriod = s.getGracePeriod();
@@ -143,16 +143,16 @@ public class Punch {
                 if((millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) < 0)){
                      //If the punch is within the grace period
                     if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
-                        adjustedTimeStamp.set(year,month,day, , );//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
+                        adjustedTimeStamp.set(year,month,day, startTimeHours,startTimeMinutes);//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
                     else if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < dock){
-                        adjustedTimeStamp.set(year,month,day,)
+                        adjustedTimeStamp.set(year,month,day,startTimeHours, startTimeMinutes + dock);
                     }
                 }
                 else{
                     if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <  interval && millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) >= 0){//We want it before the interval but if it's less than 0 than that means that the punch occured after the shift started
-                        adjustedTimeStamp.set(year,month,day, , );//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
+                        adjustedTimeStamp.set(year,month,day,startTimeHours, startTimeMinutes);//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
                     }
                 }
             }
