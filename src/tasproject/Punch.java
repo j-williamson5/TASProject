@@ -109,6 +109,12 @@ public class Punch {
     
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
     public void adjust(Shift s) {
+        
+        int interval = s.getInterval();
+        int dock = s.getDock();
+        int gracePeriod = s.getGracePeriod();
+        
+        //Make the shift times into Gregorian Calendar Objects
         GregorianCalendar startTime = new GregorianCalendar();
         startTime.setTimeInMillis(s.getStartTime().getTime());
         GregorianCalendar stopTime = new GregorianCalendar();
@@ -117,10 +123,31 @@ public class Punch {
         lunchStart.setTimeInMillis(s.getLunchStart().getTime());
         GregorianCalendar lunchStop = new GregorianCalendar();
         lunchStop.setTimeInMillis(s.getLunchStop().getTime());
-        int interval = s.getInterval();
-        int dock = s.getDock();
-        int gracePeriod = s.getGracePeriod();
         
+        //Computer the different "checkpoints" for times in our shift
+        GregorianCalendar startInterval = new GregorianCalendar();
+        startInterval.setTimeInMillis(startTime.getTimeInMillis());
+        startInterval.add(Calendar.MINUTE,-(interval));
+        
+        GregorianCalendar startGrace = new GregorianCalendar();
+        startGrace.setTimeInMillis(startTime.getTimeInMillis());
+        startGrace.add(Calendar.MINUTE,gracePeriod);
+        
+        GregorianCalendar startDock = new GregorianCalendar();
+        startDock.setTimeInMillis(startTime.getTimeInMillis());
+        startDock.add(Calendar.MINUTE,dock);
+        
+        GregorianCalendar stopInterval = new GregorianCalendar();
+        stopInterval.setTimeInMillis(stopTime.getTimeInMillis());
+        stopInterval.add(Calendar.MINUTE,interval);
+        
+        GregorianCalendar stopGrace = new GregorianCalendar();
+        stopGrace.setTimeInMillis(stopTime.getTimeInMillis());
+        stopGrace.add(Calendar.MINUTE,-(gracePeriod));
+        
+        GregorianCalendar stopDock = new GregorianCalendar();
+        stopDock.setTimeInMillis(stopTime.getTimeInMillis());
+        stopDock.add(Calendar.MINUTE,-(dock));
         
         //getting the day of the week from the punch timestamp
         Calendar cal = Calendar.getInstance();
@@ -144,9 +171,9 @@ public class Punch {
             else if(punchtypeid == 1){
                 
                 //If the punch occured after the shift start
-                if(startTime.getTime() - originalTimeStamp.getTimeInMillis() < 0){
+                if(startTime.getTimeInMillis() - originalTimeStamp.getTimeInMillis() < 0){
                      //If the punch is within the grace period
-                    if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <= gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
+                    if(millisToMinutes(startTime.getTimeInMillis() - originalTimeStamp.getTimeInMillis()) <= gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.set(year,month,day, startTimeHours,startTimeMinutes);//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
