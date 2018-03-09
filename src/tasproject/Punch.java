@@ -79,6 +79,9 @@ public class Punch {
     }
     
     public int millisToHours(long ms){
+        
+        ms = Math.abs(ms);
+        
         if (ms > DAY) {
             ms %= DAY;
           }
@@ -89,6 +92,9 @@ public class Punch {
     }
     
     public int millisToMinutes(long ms){
+        
+        ms = Math.abs(ms);
+        
         if (ms > DAY) {
             ms %= DAY;
           }
@@ -103,21 +109,18 @@ public class Punch {
     
     //Must use constants for all Parameters!!! Read through the notes from class so I suppose this will probably change later but I'm going to leave it for now.
     public void adjust(Shift s) {
-        Time startTime = s.getStartTime();
-        Time stopTime = s.getStopTime();
-        Time lunchStart = s.getLunchStart();
-        Time lunchStop = s.getLunchStop();
-        int startTimeHours = millisToHours(startTime.getTime());
-        int  startTimeMinutes = millisToMinutes(startTime.getTime());
-        int stopTimeHours = millisToHours(stopTime.getTime());
-        int stopTimeMinutes = millisToMinutes(stopTime.getTime());
-        int lunchStartHours = millisToHours(lunchStart.getTime());
-        int lunchStartMinutes = millisToMinutes(lunchStart.getTime());
-        int lunchStopHours = millisToHours(lunchStop.getTime());
-        int lunchStopMinutes = millisToMinutes(lunchStop.getTime());
+        GregorianCalendar startTime = new GregorianCalendar();
+        startTime.setTimeInMillis(s.getStartTime().getTime());
+        GregorianCalendar stopTime = new GregorianCalendar();
+        stopTime.setTimeInMillis(s.getStopTime().getTime());
+        GregorianCalendar lunchStart = new GregorianCalendar();
+        lunchStart.setTimeInMillis(s.getLunchStart().getTime());
+        GregorianCalendar lunchStop = new GregorianCalendar();
+        lunchStop.setTimeInMillis(s.getLunchStop().getTime());
         int interval = s.getInterval();
         int dock = s.getDock();
         int gracePeriod = s.getGracePeriod();
+        
         
         //getting the day of the week from the punch timestamp
         Calendar cal = Calendar.getInstance();
@@ -127,6 +130,7 @@ public class Punch {
         int day = cal.get(Calendar.DAY_OF_WEEK);
         int min =  cal.get(Calendar.MINUTE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
+        
         
         if(day == 1 || day == 7){
             
@@ -140,15 +144,16 @@ public class Punch {
             else if(punchtypeid == 1){
                 
                 //If the punch occured after the shift start
-                if((millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) < 0)){
+                if(startTime.getTime() - originalTimeStamp.getTimeInMillis() < 0){
                      //If the punch is within the grace period
-                    if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
+                    if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <= gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.set(year,month,day, startTimeHours,startTimeMinutes);//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
-                    else if(Math.abs(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis())) < dock){
+                    else if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) < dock){
                         adjustedTimeStamp.set(year,month,day,startTimeHours, startTimeMinutes + dock);
                     }
+                            
                 }
                 else{
                     if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <  interval && millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) >= 0){//We want it before the interval but if it's less than 0 than that means that the punch occured after the shift started
