@@ -78,6 +78,36 @@ public class Punch {
         
     }
     
+    public String printAdjustedTimestamp () {
+ 
+        SimpleDateFormat date = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss");
+        String stringDate = date.format(originalTimeStamp.getTime());
+        
+        //I wanted to use the table event type in TASDatabase but in there the description doesn't include the ED in CLOCKED or TIMED so this seemed easier -Josh
+        String typeOfPunch;
+        switch(punchtypeid){
+                case 0:
+                    typeOfPunch = "CLOCKED OUT";
+                    break;
+                case 1:
+                    typeOfPunch = "CLOCKED IN";
+                    break;
+                case 2:
+                    typeOfPunch = "TIMED OUT";
+                    break;
+                default:
+                    typeOfPunch = "";
+                    break;
+        }
+        
+        String typeOfAdjustment = "";
+        //Compare adjustedTimeStamp and originalTimeStamp and set the type here
+                    
+        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase() + "(" + typeOfAdjustment + ")";
+        return result;
+        
+    }
+    
     public int millisToHours(long ms){
         
         ms = Math.abs(ms);
