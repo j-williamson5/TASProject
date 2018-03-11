@@ -201,20 +201,32 @@ public class Punch {
             else if(punchtypeid == 1){
                 
                 //If the punch occured after the shift start
-                if(startTime.getTimeInMillis() - originalTimeStamp.getTimeInMillis() < 0){
+                if(originalTimeStamp.after(startTime)){
                      //If the punch is within the grace period
-                    if(millisToMinutes(startTime.getTimeInMillis() - originalTimeStamp.getTimeInMillis()) <= gracePeriod){//If the punch occured after the shift started and the punch is within the grace period
-                        adjustedTimeStamp.set(year,month,day, startTimeHours,startTimeMinutes);//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
+                    if(originalTimeStamp.before(startGrace) || originalTimeStamp.equals(startGrace)){//If the punch occured after the shift started and the punch is within the grace period
+                        adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
-                    else if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) < dock){
-                        adjustedTimeStamp.set(year,month,day,startTimeHours, startTimeMinutes + dock);
+                    else if(originalTimeStamp.before(startDock)){
+                        adjustedTimeStamp.setTimeInMillis(startDock.getTimeInMillis());
                     }
-                            
+                    //If the punch is during the specified lunch time it needs to be moved to the end of lunch
+                    else if(originalTimeStamp.after(lunchStart) || originalTimeStamp.before(lunchStop)){
+                        adjustedTimeStamp.setTimeInMillis(lunchStop.getTimeInMillis());
+                    }
+                    //If the punch is after the shift start but not in anywhere else
+                    else{
+                        
+                    }
                 }
                 else{
-                    if(millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) <  interval && millisToMinutes(startTime.getTime() - originalTimeStamp.getTimeInMillis()) >= 0){//We want it before the interval but if it's less than 0 than that means that the punch occured after the shift started
-                        adjustedTimeStamp.set(year,month,day,startTimeHours, startTimeMinutes);//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
+                    //If the punch is after the interval but before the start time
+                    if(originalTimeStamp.after(startInterval) || originalTimeStamp.equals(startInterval)){//We want it before the interval
+                        adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
+                    }
+                    //If the punch is before the shift start but not following any other rules
+                    else{
+                        
                     }
                 }
             }
@@ -269,11 +281,13 @@ public class Punch {
     //This one takes values you give it and sets the timestamp -Josh
     public void setOriginalTimeStamp(int year, int month, int day, int hour, int minute, int second) {
         this.originalTimeStamp.set(year, month, day, hour, minute, second);
+        this.adjustedTimeStamp = this.originalTimeStamp;
     }
     
     //This one sets the timestamp to the values the class already has -Josh
     public void setOriginalTimeStamp(GregorianCalendar time){
         this.originalTimeStamp = time;
+         this.adjustedTimeStamp = this.originalTimeStamp;
     }
     
     public String getEventData(){
