@@ -86,9 +86,12 @@ public class Feature3 {
 		
         /* Adjust Punches According to Shift Rulesets */
         
+        System.out.println(p1.printOriginalTimestamp());
+        
         p1.adjust(s2);
         p2.adjust(s2);
         
+        System.out.println(p1.printOriginalTimestamp());
         /* Compare Adjusted Timestamps to Expected Values */
 
         assertEquals("#08D01475 CLOCKED IN: TUE 09/19/2017 11:59:33", p1.printOriginalTimestamp());

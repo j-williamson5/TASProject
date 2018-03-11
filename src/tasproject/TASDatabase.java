@@ -67,13 +67,19 @@ public class TASDatabase {
         //Getting things from resultset
         if ( result != null ){
             while(result.next()){
+                
                 //Make a Time object for easy use in setters for the Punch object
+                /*
                 Timestamp timeStamp = result.getTimestamp("originaltimestamp");
                 LocalDateTime dateTime = timeStamp.toLocalDateTime();
                 ZoneId zone = TimeZone.getDefault().toZoneId();
                 ZonedDateTime zoneDateTime = dateTime.atZone(zone);
                 GregorianCalendar time = GregorianCalendar.from(zoneDateTime);
-
+                */
+                Timestamp timeStamp = result.getTimestamp("originaltimestamp");
+                GregorianCalendar time = new GregorianCalendar();
+                time.setTimeInMillis(timeStamp.getTime());
+                
                 //result.next();
                 b.setId(result.getString("badgeid"));
                 p.setBadge(b);

@@ -143,18 +143,32 @@ public class Punch {
         int interval = s.getInterval();
         int dock = s.getDock();
         int gracePeriod = s.getGracePeriod();
+
+        //getting the day of the week from the punch timestamp
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(originalTimeStamp.getTimeInMillis());
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        int min =  cal.get(Calendar.MINUTE);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        
         
         //Make the shift times into Gregorian Calendar Objects
         GregorianCalendar startTime = new GregorianCalendar();
         startTime.setTimeInMillis(s.getStartTime().getTime());
+        startTime.set(year,month,day);
         GregorianCalendar stopTime = new GregorianCalendar();
         stopTime.setTimeInMillis(s.getStopTime().getTime());
+        stopTime.set(year,month,day);
         GregorianCalendar lunchStart = new GregorianCalendar();
         lunchStart.setTimeInMillis(s.getLunchStart().getTime());
+        lunchStart.set(year,month,day);
         GregorianCalendar lunchStop = new GregorianCalendar();
         lunchStop.setTimeInMillis(s.getLunchStop().getTime());
+        lunchStop.set(year,month,day);
         
-        //Computer the different "checkpoints" for times in our shift
+        //Compute the different "checkpoints" for times in our shift
         GregorianCalendar startInterval = new GregorianCalendar();
         startInterval.setTimeInMillis(startTime.getTimeInMillis());
         startInterval.add(Calendar.MINUTE,-(interval));
@@ -179,15 +193,7 @@ public class Punch {
         stopDock.setTimeInMillis(stopTime.getTimeInMillis());
         stopDock.add(Calendar.MINUTE,-(dock));
         
-        //getting the day of the week from the punch timestamp
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(originalTimeStamp.getTimeInMillis());
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_WEEK);
-        int min =  cal.get(Calendar.MINUTE);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        
+
         
         if(day == 1 || day == 7){
             
@@ -203,7 +209,7 @@ public class Punch {
                 //If the punch occured after the shift start
                 if(originalTimeStamp.after(startTime)){
                      //If the punch is within the grace period
-                    if(originalTimeStamp.before(startGrace) || originalTimeStamp.equals(startGrace)){//If the punch occured after the shift started and the punch is within the grace period
+                    if(originalTimeStamp.compareTo(startGrace) <= 0){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
@@ -211,7 +217,7 @@ public class Punch {
                         adjustedTimeStamp.setTimeInMillis(startDock.getTimeInMillis());
                     }
                     //If the punch is during the specified lunch time it needs to be moved to the end of lunch
-                    else if(originalTimeStamp.after(lunchStart) || originalTimeStamp.before(lunchStop)){
+                    else if(originalTimeStamp.compareTo(lunchStop) >= 0){
                         adjustedTimeStamp.setTimeInMillis(lunchStop.getTimeInMillis());
                     }
                     //If the punch is after the shift start but not in anywhere else
@@ -221,7 +227,7 @@ public class Punch {
                 }
                 else{
                     //If the punch is after the interval but before the start time
-                    if(originalTimeStamp.after(startInterval) || originalTimeStamp.equals(startInterval)){//We want it before the interval
+                    if(originalTimeStamp.compareTo(startInterval) >= 0){//We want it before the interval
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
                     }
                     //If the punch is before the shift start but not following any other rules
@@ -277,17 +283,17 @@ public class Punch {
     public GregorianCalendar getOriginaltimestamp() {
         return originalTimeStamp;
     }
-
+/*
     //This one takes values you give it and sets the timestamp -Josh
     public void setOriginalTimeStamp(int year, int month, int day, int hour, int minute, int second) {
         this.originalTimeStamp.set(year, month, day, hour, minute, second);
         this.adjustedTimeStamp = this.originalTimeStamp;
     }
-    
+    */
     //This one sets the timestamp to the values the class already has -Josh
     public void setOriginalTimeStamp(GregorianCalendar time){
         this.originalTimeStamp = time;
-         this.adjustedTimeStamp = this.originalTimeStamp;
+         this.adjustedTimeStamp = time;
     }
     
     public String getEventData(){
