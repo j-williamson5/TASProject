@@ -22,11 +22,13 @@ public class Punch {
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     GregorianCalendar adjustedTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     String eventData = null;
+    String adjustInfo = "None";
     
     private static final int SECOND = 1000;
     private static final int MINUTE = 60 * SECOND;
     private static final int HOUR = 60 * MINUTE;
     private static final int DAY = 24 * HOUR;
+    private static final int YEAR = 365 * DAY;
     
     //Empty constructor for TASDatabase - Josh
     public Punch(){};
@@ -100,10 +102,10 @@ public class Punch {
                     break;
         }
         
-        String typeOfAdjustment = "";
+        
         //Compare adjustedTimeStamp and originalTimeStamp and set the type here
                     
-        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase() + "(" + typeOfAdjustment + ")";
+        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase() + " (" + adjustInfo + ")";
         return result;
         
     }
@@ -111,6 +113,10 @@ public class Punch {
     public int millisToHours(long ms){
         
         ms = Math.abs(ms);
+        
+        if(ms > YEAR){
+            ms %= YEAR;
+        }
         
         if (ms > DAY) {
             ms %= DAY;
@@ -125,6 +131,10 @@ public class Punch {
         
         ms = Math.abs(ms);
         
+         if(ms > YEAR){
+            ms %= YEAR;
+        }
+         
         if (ms > DAY) {
             ms %= DAY;
           }
@@ -150,8 +160,10 @@ public class Punch {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         int min =  cal.get(Calendar.MINUTE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int sec = cal.get(Calendar.SECOND);
         
         
         //Make the shift times into Gregorian Calendar Objects
@@ -193,15 +205,94 @@ public class Punch {
         stopDock.setTimeInMillis(stopTime.getTimeInMillis());
         stopDock.add(Calendar.MINUTE,-(dock));
         
-
+        //Set the adjustedTimeStamp because it never gets set when the originalTimeStamp does and doing so causes errors 
+        adjustedTimeStamp.setTimeInMillis(originalTimeStamp.getTimeInMillis());
         
-        if(day == 1 || day == 7){
+        //If the punch is a weekend punch
+        if(dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY){
             
+            if(min % interval != 0){
+                
+                adjustedTimeStamp.setTimeInMillis(originalTimeStamp.getTimeInMillis());
+                
+                if(min % interval < interval/2){
+                    adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
+                    adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                    adjustInfo = "Interval Round";
+                }
+                else{
+                    adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval ));
+                    adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                    adjustInfo = "Interval Round";
+                }
+            }
         }
+        //If the punch is a weekday punch
         else{
             //If the punch is a clock out punch
             if(punchtypeid == 0){
+                //If the punch occured before the shift stop
+                if(originalTimeStamp.before(stopTime)){
+                    //If the punch within the stop grace period
+                    if(originalTimeStamp.after(stopGrace) || originalTimeStamp.equals(stopGrace)){
+                        adjustedTimeStamp.setTimeInMillis(stopTime.getTimeInMillis());
+                        adjustInfo = "Shift Stop";
+                    }
+                    //If the punch after the stop dock(No need to check for within grace because that already occured
+                    else if(originalTimeStamp.after(stopDock) || originalTimeStamp.equals(stopDock)){
+                        adjustedTimeStamp.setTimeInMillis(stopDock.getTimeInMillis());
+                        adjustInfo = "Shift Dock";
+                    }
+                    //If the punch during the lunch period
+                    else if(originalTimeStamp.before(lunchStop) && originalTimeStamp.after(lunchStart)){
+                        adjustedTimeStamp.setTimeInMillis(lunchStart.getTimeInMillis());
+                        adjustInfo = "Lunch Start";
+                    }
+                    //If the punch is before the shift end but no where else
+                    else{
+                        if(min % interval != 0){
                 
+                            adjustedTimeStamp.setTimeInMillis(originalTimeStamp.getTimeInMillis());
+
+                            if(min % interval < interval/2){
+                                adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                            else{
+                                adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                        }
+                    }
+                }
+                //if the punch is after the shift stop
+                else{
+                    //If the punch is after the shift stop but before the stop interval
+                    if(originalTimeStamp.before(stopInterval) || originalTimeStamp.equals(stopInterval)){
+                        adjustedTimeStamp.setTimeInMillis(stopTime.getTimeInMillis());
+                        adjustInfo = "Shift Stop";
+                    }
+                    
+                    //If the punch follows no other rules
+                    else{
+                        if(min % interval != 0){
+                
+
+                            if(min % interval < interval/2){
+                                adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                            else{
+                                adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                        }
+                    }
+                }
             }
             //If the punch is a clock in punch
             else if(punchtypeid == 1){
@@ -211,28 +302,56 @@ public class Punch {
                      //If the punch is within the grace period
                     if(originalTimeStamp.before(startGrace) || originalTimeStamp.equals(startGrace)){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
+                        adjustInfo = "Shift Start";
                     }
                     //If the punch is after the grace period but before the dock
-                    else if(originalTimeStamp.before(startDock)){
+                    else if(originalTimeStamp.before(startDock) || originalTimeStamp.equals(startDock)){
                         adjustedTimeStamp.setTimeInMillis(startDock.getTimeInMillis());
+                        adjustInfo = "Shift Dock";
                     }
                     //If the punch is during the specified lunch time it needs to be moved to the end of lunch
                     else if(originalTimeStamp.after(lunchStart) && originalTimeStamp.before(lunchStop)){
                         adjustedTimeStamp.setTimeInMillis(lunchStop.getTimeInMillis());
+                        adjustInfo = "Lunch Stop";
                     }
                     //If the punch is after the shift start but not in anywhere else
                     else{
-                        
+                            if(min % interval != 0){
+
+                                if(min % interval < interval/2){
+                                    adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
+                                    adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                    adjustInfo = "Interval Round";
+                                }
+                                else{
+                                    adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
+                                    adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                    adjustInfo = "Interval Round";
+                                }
+                        }
                     }
                 }
                 else{
                     //If the punch is after the interval but before the start time
-                    if(originalTimeStamp.after(startInterval)){//We want it before the interval
+                    if(originalTimeStamp.after(startInterval)  || originalTimeStamp.equals(startInterval)){//We want it before the interval
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
+                        adjustInfo = "Shift Start";
                     }
                     //If the punch is before the shift start but not following any other rules
                     else{
-                        
+                     if(min % interval != 0){
+
+                            if(min % interval < interval/2){
+                                adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                            else{
+                                adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
+                                adjustedTimeStamp.add(Calendar.SECOND, -sec);
+                                adjustInfo = "Interval Round";
+                            }
+                        }
                     }
                 }
             }
