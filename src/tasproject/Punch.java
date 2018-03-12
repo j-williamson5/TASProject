@@ -81,7 +81,7 @@ public class Punch {
     public String printAdjustedTimestamp () {
  
         SimpleDateFormat date = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss");
-        String stringDate = date.format(originalTimeStamp.getTime());
+        String stringDate = date.format(adjustedTimeStamp.getTime());
         
         //I wanted to use the table event type in TASDatabase but in there the description doesn't include the ED in CLOCKED or TIMED so this seemed easier -Josh
         String typeOfPunch;
@@ -149,7 +149,7 @@ public class Punch {
         cal.setTimeInMillis(originalTimeStamp.getTimeInMillis());
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_WEEK);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         int min =  cal.get(Calendar.MINUTE);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         
@@ -209,7 +209,7 @@ public class Punch {
                 //If the punch occured after the shift start
                 if(originalTimeStamp.after(startTime)){
                      //If the punch is within the grace period
-                    if(originalTimeStamp.compareTo(startGrace) <= 0){//If the punch occured after the shift started and the punch is within the grace period
+                    if(originalTimeStamp.before(startGrace) || originalTimeStamp.equals(startGrace)){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
                     }
                     //If the punch is after the grace period but before the dock
@@ -217,7 +217,7 @@ public class Punch {
                         adjustedTimeStamp.setTimeInMillis(startDock.getTimeInMillis());
                     }
                     //If the punch is during the specified lunch time it needs to be moved to the end of lunch
-                    else if(originalTimeStamp.compareTo(lunchStop) >= 0){
+                    else if(originalTimeStamp.after(lunchStart) && originalTimeStamp.before(lunchStop)){
                         adjustedTimeStamp.setTimeInMillis(lunchStop.getTimeInMillis());
                     }
                     //If the punch is after the shift start but not in anywhere else
@@ -227,7 +227,7 @@ public class Punch {
                 }
                 else{
                     //If the punch is after the interval but before the start time
-                    if(originalTimeStamp.compareTo(startInterval) >= 0){//We want it before the interval
+                    if(originalTimeStamp.after(startInterval)){//We want it before the interval
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
                     }
                     //If the punch is before the shift start but not following any other rules
@@ -237,7 +237,6 @@ public class Punch {
                 }
             }
         }
-        
     }
 
     //Setters and Getters - Josh
@@ -293,7 +292,6 @@ public class Punch {
     //This one sets the timestamp to the values the class already has -Josh
     public void setOriginalTimeStamp(GregorianCalendar time){
         this.originalTimeStamp = time;
-         this.adjustedTimeStamp = time;
     }
     
     public String getEventData(){
