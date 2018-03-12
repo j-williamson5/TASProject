@@ -150,22 +150,24 @@ public class TASDatabase {
         
     }
     
-    public Shift getShift(String badgeID) throws SQLException{
-            
+    public Shift getShift(Badge bg) throws SQLException, InstantiationException, IllegalAccessException{
+        
+        String badgeID = bg.getID();
+        
         //SQL Query for shift
         this.stmt = conn.createStatement();
-        ResultSet result = stmt.executeQuery("SELECT * FROM Employee WHERE badgeid=badgeID");
+        ResultSet result = stmt.executeQuery("SELECT * FROM Employee WHERE badgeid=" + "'" + badgeID + "'");
         
         String employeeShiftID = "";
+        
         //Getting things from resultset
         if(result != null){
             while(result.next()){
-                result.next();
                 employeeShiftID = result.getString("shiftid");
             }
         }
 
-        return getShift(employeeShiftID);
+        return getShift(Integer.valueOf(employeeShiftID));
     }
     
     public int insertPunch(Punch p) throws SQLException{
