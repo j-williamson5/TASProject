@@ -16,22 +16,28 @@ import java.util.GregorianCalendar;
 public class TASLogic {
     
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift){
-        int totalMinutes;
-        int totalInMillis;
+        int totalMinutes = 0;
+        int totalInMillis = 0;
         
         // Creating time objects for each aspect of the shift 
         
         GregorianCalendar startTime = new GregorianCalendar();
         startTime.setTimeInMillis(shift.getStartTime().getTime());
+        long startInMillis = startTime.getTimeInMillis();
         
         GregorianCalendar stopTime = new GregorianCalendar();
         stopTime.setTimeInMillis(shift.getStopTime().getTime());
+        long stopInMillis = stopTime.getTimeInMillis();
         
         GregorianCalendar lunchStart = new GregorianCalendar();
         lunchStart.setTimeInMillis(shift.getLunchStart().getTime());
+        long lunchStartMillis = lunchStart.getTimeInMillis();
         
         GregorianCalendar lunchStop = new GregorianCalendar();
         lunchStop.setTimeInMillis(shift.getLunchStop().getTime());
+        long lunchStopMillis = lunchStop.getTimeInMillis();
+        
+        
         
         
         
