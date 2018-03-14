@@ -420,4 +420,8 @@ public class Punch {
     public void setEventData(String eventData){
         this.eventData = eventData;
     }
+    
+    public GregorianCalendar getAdjustedTimeStamp(){
+        return adjustedTimeStamp;
+    }
 }
