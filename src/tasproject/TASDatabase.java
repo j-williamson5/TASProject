@@ -239,6 +239,10 @@ public class TASDatabase {
             }//end while
         }//end if result is not null
         
+        //THIS IS A TEST TO SEE IF EVERYTHING IS WORKING RIGHT -JOSH
+        if(resultList.isEmpty()){
+            System.out.println("EMPTY RESULT LIST");
+        }
         return resultList;
         
     }//end arrraylist method
