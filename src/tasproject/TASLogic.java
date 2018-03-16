@@ -57,24 +57,14 @@ public class TASLogic {
     }
     
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
-        /* Create ArrayList Object */
+        //Create ArrayList Object
         ArrayList<HashMap<String, String>> jsonData = new ArrayList<>();
 
-        /* Create HashMap Object (one for every Punch!) */
+        //Create HashMap Object (one for every Punch!)
         HashMap<String, String>  punchData = new HashMap<>();
         
-        /*
-        THINGS TO ADD
-        id: The punch ID
-        badgeid: The badge ID
-        terminalid: The terminal ID
-        eventtypeid: The event/punch type (0 for Clock Out, 1 for Clock In, etc.)
-        eventdata: The adjustment description added to the punch during the adjustment (see Feature 3)
-        originaltimestamp: The original timestamp (retrieve this timestamp as a long integer, then convert it into a string for storage in the HashMap)
-        */
-        
         for(Punch punch: dailypunchlist){
-              /* Add Punch Data to HashMap */
+              //Add Punch Data to HashMap
               punchData.put("id", String.valueOf(punch.getId()));
               punchData.put("badgeid", String.valueOf(punch.getBadgeid()));
               punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
@@ -83,8 +73,7 @@ public class TASLogic {
               punchData.put("originaltimestamp",String.valueOf(punch.getOriginaltimestamp().getTimeInMillis()));
         }
         
-        
-        /* Append HashMap to ArrayList */
+        //Append HashMap to ArrayList
         jsonData.add(punchData);
         
     }
