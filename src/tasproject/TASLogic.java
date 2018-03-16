@@ -27,13 +27,13 @@ public class TASLogic {
         int outFoundAt = 0;
         for(int i = outFoundAt; i < dailyPunchList.size();++i){
             //Getting a "CLOCK IN punch"
-            if(dailyPunchList.get(i).id == 1){
+            if(dailyPunchList.get(i).getPunchtypeid() == 1){
                 //boolean flag to flip once we find a "CLOCK OUT" punch.
                 insidePair = false;
                
                 //Searching for a corresponding "CLOCK OUT" punch to pair the "CLOCK IN" with.
                 for(int j =outFoundAt; j < dailyPunchList.size();++j){
-                    if(dailyPunchList.get(j).id == 0){
+                    if(dailyPunchList.get(j).getPunchtypeid() == 0){
                         insidePair = true;
                         outFoundAt = j;
                         // We are inside a "CLOCK IN" and "CLOCK OUT" pair. Now we need to calculate minutes in between the two.
@@ -46,18 +46,9 @@ public class TASLogic {
                 }
             }
         }
+      
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        return totalMinutes;
+
     }
     
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
