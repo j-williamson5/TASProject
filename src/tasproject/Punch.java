@@ -22,8 +22,7 @@ public class Punch {
     String badgeDescription;
     GregorianCalendar originalTimeStamp = new GregorianCalendar(TimeZone.getDefault());
     GregorianCalendar adjustedTimeStamp = new GregorianCalendar(TimeZone.getDefault());
-    String eventData = null;
-    String adjustInfo = "None";
+    String eventData = "None";
     
     private static final int SECOND = 1000;
     private static final int MINUTE = 60 * SECOND;
@@ -106,7 +105,7 @@ public class Punch {
         
         //Compare adjustedTimeStamp and originalTimeStamp and set the type here
                     
-        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase() + " (" + adjustInfo + ")";
+        String result = "#" + badge.getID() + " " + typeOfPunch + ": " + stringDate.toUpperCase() + " (" + eventData + ")";
         return result;
         
     }
@@ -219,12 +218,12 @@ public class Punch {
                 if(min % interval < interval/2){
                     adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
                     adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                    adjustInfo = "Interval Round";
+                    eventData = "Interval Round";
                 }
                 else{
                     adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval ));
                     adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                    adjustInfo = "Interval Round";
+                    eventData = "Interval Round";
                 }
             }
         }
@@ -237,17 +236,17 @@ public class Punch {
                     //If the punch within the stop grace period
                     if(originalTimeStamp.after(stopGrace) || originalTimeStamp.equals(stopGrace)){
                         adjustedTimeStamp.setTimeInMillis(stopTime.getTimeInMillis());
-                        adjustInfo = "Shift Stop";
+                        eventData = "Shift Stop";
                     }
                     //If the punch after the stop dock(No need to check for within grace because that already occured
                     else if(originalTimeStamp.after(stopDock) || originalTimeStamp.equals(stopDock)){
                         adjustedTimeStamp.setTimeInMillis(stopDock.getTimeInMillis());
-                        adjustInfo = "Shift Dock";
+                        eventData = "Shift Dock";
                     }
                     //If the punch during the lunch period
                     else if(originalTimeStamp.before(lunchStop) && originalTimeStamp.after(lunchStart)){
                         adjustedTimeStamp.setTimeInMillis(lunchStart.getTimeInMillis());
-                        adjustInfo = "Lunch Start";
+                        eventData = "Lunch Start";
                     }
                     //If the punch is before the shift end but no where else
                     else{
@@ -258,12 +257,12 @@ public class Punch {
                             if(min % interval < interval/2){
                                 adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                             else{
                                 adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                         }
                     }
@@ -273,7 +272,7 @@ public class Punch {
                     //If the punch is after the shift stop but before the stop interval
                     if(originalTimeStamp.before(stopInterval) || originalTimeStamp.equals(stopInterval)){
                         adjustedTimeStamp.setTimeInMillis(stopTime.getTimeInMillis());
-                        adjustInfo = "Shift Stop";
+                        eventData = "Shift Stop";
                     }
                     
                     //If the punch follows no other rules
@@ -284,12 +283,12 @@ public class Punch {
                             if(min % interval < interval/2){
                                 adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                             else{
                                 adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                         }
                     }
@@ -303,17 +302,17 @@ public class Punch {
                      //If the punch is within the grace period
                     if(originalTimeStamp.before(startGrace) || originalTimeStamp.equals(startGrace)){//If the punch occured after the shift started and the punch is within the grace period
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp back to the right hour and minute of the start of the shift.
-                        adjustInfo = "Shift Start";
+                        eventData = "Shift Start";
                     }
                     //If the punch is after the grace period but before the dock
                     else if(originalTimeStamp.before(startDock) || originalTimeStamp.equals(startDock)){
                         adjustedTimeStamp.setTimeInMillis(startDock.getTimeInMillis());
-                        adjustInfo = "Shift Dock";
+                        eventData = "Shift Dock";
                     }
                     //If the punch is during the specified lunch time it needs to be moved to the end of lunch
                     else if(originalTimeStamp.after(lunchStart) && originalTimeStamp.before(lunchStop)){
                         adjustedTimeStamp.setTimeInMillis(lunchStop.getTimeInMillis());
-                        adjustInfo = "Lunch Stop";
+                        eventData = "Lunch Stop";
                     }
                     //If the punch is after the shift start but not in anywhere else
                     else{
@@ -322,12 +321,12 @@ public class Punch {
                                 if(min % interval < interval/2){
                                     adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
                                     adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                    adjustInfo = "Interval Round";
+                                    eventData = "Interval Round";
                                 }
                                 else{
                                     adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
                                     adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                    adjustInfo = "Interval Round";
+                                    eventData = "Interval Round";
                                 }
                         }
                     }
@@ -336,7 +335,7 @@ public class Punch {
                     //If the punch is after the interval but before the start time
                     if(originalTimeStamp.after(startInterval)  || originalTimeStamp.equals(startInterval)){//We want it before the interval
                         adjustedTimeStamp.setTimeInMillis(startTime.getTimeInMillis());//Moving the adjusted time stamp up to the right hour and minute of the start of the shift.
-                        adjustInfo = "Shift Start";
+                        eventData = "Shift Start";
                     }
                     //If the punch is before the shift start but not following any other rules
                     else{
@@ -345,12 +344,12 @@ public class Punch {
                             if(min % interval < interval/2){
                                 adjustedTimeStamp.add(Calendar.MINUTE,-(min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                             else{
                                 adjustedTimeStamp.add(Calendar.MINUTE, (interval - min % interval));
                                 adjustedTimeStamp.add(Calendar.SECOND, -sec);
-                                adjustInfo = "Interval Round";
+                                eventData = "Interval Round";
                             }
                         }
                     }
