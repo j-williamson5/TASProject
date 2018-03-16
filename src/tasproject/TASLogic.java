@@ -8,6 +8,7 @@ package tasproject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.simple.*;
+import org.json.simple.parser.*;
 import java.util.GregorianCalendar;
 
 /**
@@ -63,6 +64,12 @@ public class TASLogic {
         //Create HashMap Object (one for every Punch!)
         HashMap<String, String>  punchData = new HashMap<>();
         
+        //USED FOR DEBUGGING ONLY REMOVE LATER
+        if(dailypunchlist.isEmpty()){
+            System.out.println("EMPTY PUNCH LIST!");
+        }
+        
+        //Loop through the punches and put their info into the appropriate places
         for(Punch punch: dailypunchlist){
               //Add Punch Data to HashMap
               punchData.put("id", String.valueOf(punch.getId()));
@@ -71,11 +78,16 @@ public class TASLogic {
               punchData.put("eventtypeid",String.valueOf(punch.getPunchtypeid()));
               punchData.put("eventdata",punch.getEventData());
               punchData.put("originaltimestamp",String.valueOf(punch.getOriginaltimestamp().getTimeInMillis()));
+              punchData.put("adjustedtimestamp",String.valueOf(punch.getAdjustedTimeStamp()));
         }
         
         //Append HashMap to ArrayList
         jsonData.add(punchData);
         
+        String results = JSONValue.toJSONString(jsonData);
+        
+        //REMOVE LATER
+        return results;
     }
     
 }
