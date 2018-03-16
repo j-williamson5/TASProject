@@ -82,6 +82,7 @@ public class TASDatabase {
                 
                 //result.next();
                 b.setId(result.getString("badgeid"));
+                p.setId(id);
                 p.setBadge(b);
                 p.setBadgeId(result.getString("badgeid"));
                 p.setTerminalid(result.getInt("terminalid"));

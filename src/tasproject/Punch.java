@@ -16,6 +16,7 @@ public class Punch {
     //Instance Fields
     int terminalid = 0;
     int punchtypeid = 0;
+    int id = 0;
     Badge badge;
     String badgeid;
     String badgeDescription;
@@ -423,5 +424,13 @@ public class Punch {
     
     public GregorianCalendar getAdjustedTimeStamp(){
         return adjustedTimeStamp;
+    }
+    
+    public void setId(int id){
+        this.id = id;
+    }
+    
+    public int getId(){
+        return this.id;
     }
 }
