@@ -16,27 +16,36 @@ import java.util.GregorianCalendar;
  */
 public class TASLogic {
     
-    public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift){
+    public static int calculateTotalMinutes(ArrayList<Punch> dailyPunchList, Shift shift){
         int totalMinutes = 0;
         int totalInMillis = 0;
+        boolean insidePair;
         
-        // Creating time objects for each aspect of the shift 
+        //ALGORITHM - Looping through the punch list and finding a "CLOCK IN" punch and a corresponding "CLOCK OUT" punch. Once we find those two we are
+        //inside of a pair. Once inside a pair we calculate the minutes. After that we continue loop from the last "CLOCK OUT" punch. 
         
-        GregorianCalendar startTime = new GregorianCalendar();
-        startTime.setTimeInMillis(shift.getStartTime().getTime());
-        long startInMillis = startTime.getTimeInMillis();
-        
-        GregorianCalendar stopTime = new GregorianCalendar();
-        stopTime.setTimeInMillis(shift.getStopTime().getTime());
-        long stopInMillis = stopTime.getTimeInMillis();
-        
-        GregorianCalendar lunchStart = new GregorianCalendar();
-        lunchStart.setTimeInMillis(shift.getLunchStart().getTime());
-        long lunchStartMillis = lunchStart.getTimeInMillis();
-        
-        GregorianCalendar lunchStop = new GregorianCalendar();
-        lunchStop.setTimeInMillis(shift.getLunchStop().getTime());
-        long lunchStopMillis = lunchStop.getTimeInMillis();
+        int outFoundAt = 0;
+        for(int i = outFoundAt; i < dailyPunchList.size();++i){
+            //Getting a "CLOCK IN punch"
+            if(dailyPunchList.get(i).id == 1){
+                //boolean flag to flip once we find a "CLOCK OUT" punch.
+                insidePair = false;
+               
+                //Searching for a corresponding "CLOCK OUT" punch to pair the "CLOCK IN" with.
+                for(int j =outFoundAt; j < dailyPunchList.size();++j){
+                    if(dailyPunchList.get(j).id == 0){
+                        insidePair = true;
+                        outFoundAt = j;
+                        // We are inside a "CLOCK IN" and "CLOCK OUT" pair. Now we need to calculate minutes in between the two.
+                        if(insidePair){
+                            
+                        }
+                    }
+                    
+                        
+                }
+            }
+        }
         
         
         
