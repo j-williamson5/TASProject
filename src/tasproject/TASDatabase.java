@@ -207,30 +207,35 @@ public class TASDatabase {
     public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException{
         //list to return
         ArrayList <Punch> resultList = new ArrayList<>();
+        String badgeId = b.getID();//You were using badge to search the event table not badgeId
         
         //sql statement and query for daily punch list
         this.stmt = conn.createStatement();
         //retreiving the timestamp from database that belong to the badgeid given
-        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE badgeid = " + "'"+ b +"'");
+        ResultSet result = stmt.executeQuery("SELECT * FROM Event WHERE badgeid =" + "'"+ badgeId +"'");
         
         //get day from gregorian calendar
         long milliTime = ts.getTimeInMillis();
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(milliTime);
         int dayGiven = c.get(Calendar.DAY_OF_MONTH);
+        int monthGiven = c.get(Calendar.MONTH);
+        int yearGiven = c.get(Calendar.YEAR);
         
         //iterating througt the results
         if(result != null){
             while(result.next()){
-                result.next();
+                //result.next();
                 //get day from timestamp that the query returned
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(result.getLong("originaltimestamp"));
                 int dayRetreived = cal.get(Calendar.DAY_OF_MONTH);
+                int monthRetreived = cal.get(Calendar.MONTH);
+                int yearRetreived = c.get(Calendar.YEAR);
                 
                 //if the days are the same we want to return all this badgeid's punches
                 //punch takes badgeid, terminalid, and punchtypeid
-                if(dayGiven == dayRetreived){
+                if(dayGiven == dayRetreived && monthGiven == monthRetreived && yearGiven == yearRetreived){
                     //creating and adding the punches to the list to return
                     Punch p = new Punch(result.getString("badgeid"), result.getInt("terminalid"), result.getInt("eventtypeid"));
                     resultList.add(p);
@@ -238,6 +243,7 @@ public class TASDatabase {
                 }//end if day given equals day retreived
             }//end while
         }//end if result is not null
+        
         
         //THIS IS A TEST TO SEE IF EVERYTHING IS WORKING RIGHT -JOSH
         if(resultList.isEmpty()){
