@@ -5,6 +5,8 @@
  */
 package tasproject;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.simple.*;
@@ -57,7 +59,9 @@ public class TASLogic {
 
     }
     
-    public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
+    public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist) throws SQLException, InstantiationException, IllegalAccessException{
+        TASDatabase db = new TASDatabase();
+        
         //Create ArrayList Object
         ArrayList<HashMap<String, String>> jsonData = new ArrayList<>();
 
@@ -71,6 +75,12 @@ public class TASLogic {
         
         //Loop through the punches and put their info into the appropriate places
         for(Punch punch: dailypunchlist){
+              
+              
+              //Get the shift associated with this punch and adjust the punch
+              Shift s = db.getShift(punch.getBadge());
+              punch.adjust(s);
+              
               //Add Punch Data to HashMap
               punchData.put("id", String.valueOf(punch.getId()));
               punchData.put("badgeid", String.valueOf(punch.getBadgeid()));
@@ -78,7 +88,7 @@ public class TASLogic {
               punchData.put("eventtypeid",String.valueOf(punch.getPunchtypeid()));
               punchData.put("eventdata",punch.getEventData());
               punchData.put("originaltimestamp",String.valueOf(punch.getOriginaltimestamp().getTimeInMillis()));
-              punchData.put("adjustedtimestamp",String.valueOf(punch.getAdjustedTimeStamp()));
+              punchData.put("adjustedtimestamp",String.valueOf(punch.getAdjustedTimeStamp().getTimeInMillis()));
         }
         
         //Append HashMap to ArrayList

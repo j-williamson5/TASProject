@@ -204,7 +204,7 @@ public class TASDatabase {
         return key;
     }
     
-    public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException{
+    public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException, InstantiationException, IllegalAccessException{
         //list to return
         ArrayList <Punch> resultList = new ArrayList<>();
         String badgeId = b.getID();//You were using badge to search the event table not badgeId
@@ -225,10 +225,13 @@ public class TASDatabase {
         //iterating througt the results
         if(result != null){
             while(result.next()){
+                
                 //result.next();
-                //get day from timestamp that the query returned
+                
+                //get day month and year from timestamp that the query returned
                 Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(result.getLong("originaltimestamp"));
+                Timestamp timeStamp = result.getTimestamp("originaltimestamp");
+                cal.setTimeInMillis(timeStamp.getTime());
                 int dayRetreived = cal.get(Calendar.DAY_OF_MONTH);
                 int monthRetreived = cal.get(Calendar.MONTH);
                 int yearRetreived = c.get(Calendar.YEAR);
@@ -236,19 +239,15 @@ public class TASDatabase {
                 //if the days are the same we want to return all this badgeid's punches
                 //punch takes badgeid, terminalid, and punchtypeid
                 if(dayGiven == dayRetreived && monthGiven == monthRetreived && yearGiven == yearRetreived){
+                    
                     //creating and adding the punches to the list to return
-                    Punch p = new Punch(result.getString("badgeid"), result.getInt("terminalid"), result.getInt("eventtypeid"));
+                    Punch p = getPunch(result.getInt("id"));
                     resultList.add(p);
                     
                 }//end if day given equals day retreived
             }//end while
         }//end if result is not null
-        
-        
-        //THIS IS A TEST TO SEE IF EVERYTHING IS WORKING RIGHT -JOSH
-        if(resultList.isEmpty()){
-            System.out.println("EMPTY RESULT LIST");
-        }
+
         return resultList;
         
     }//end arrraylist method
