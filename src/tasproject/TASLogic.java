@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tasproject;
 
 import java.sql.ResultSet;
@@ -15,7 +11,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author madel
+ * @author Matthew
  */
 public class TASLogic {
     
@@ -68,14 +64,9 @@ public class TASLogic {
         //Create HashMap Object (one for every Punch!)
         HashMap<String, String>  punchData = new HashMap<>();
         
-        //USED FOR DEBUGGING ONLY REMOVE LATER
-        if(dailypunchlist.isEmpty()){
-            System.out.println("EMPTY PUNCH LIST!");
-        }
         
         //Loop through the punches and put their info into the appropriate places
         for(Punch punch: dailypunchlist){
-              
               
               //Get the shift associated with this punch and adjust the punch
               Shift s = db.getShift(punch.getBadge());
@@ -96,7 +87,7 @@ public class TASLogic {
         
         String results = JSONValue.toJSONString(jsonData);
         
-        //REMOVE LATER
+        //REMOVE LATER ... why?
         return results;
     }
     
