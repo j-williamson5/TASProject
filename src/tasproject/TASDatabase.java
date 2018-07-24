@@ -1,22 +1,21 @@
-/*
- Matthew and Josh
- */
+
 package tasproject;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /**
  *
  * @author Josh and Matthew
+ * 
  */
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 public class TASDatabase {
     
     //Instance fields
@@ -26,7 +25,7 @@ public class TASDatabase {
      Connection conn;
      Statement stmt;
      
-     //Constructor
+    //Constructor
     public TASDatabase() throws SQLException, InstantiationException, IllegalAccessException{
         this.url = "jdbc:mysql://localhost/tas";
         this.username = "tasuser";
@@ -207,7 +206,7 @@ public class TASDatabase {
     public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts) throws SQLException, InstantiationException, IllegalAccessException{
         //list to return
         ArrayList <Punch> resultList = new ArrayList<>();
-        String badgeId = b.getID();//You were using badge to search the event table not badgeId
+        String badgeId = b.getID();
         
         //sql statement and query for daily punch list
         this.stmt = conn.createStatement();
@@ -226,8 +225,6 @@ public class TASDatabase {
         if(result != null){
             while(result.next()){
                 
-                //result.next();
-                
                 //get day month and year from timestamp that the query returned
                 Calendar cal = Calendar.getInstance();
                 Timestamp timeStamp = result.getTimestamp("originaltimestamp");
@@ -235,6 +232,15 @@ public class TASDatabase {
                 int dayRetreived = cal.get(Calendar.DAY_OF_MONTH);
                 int monthRetreived = cal.get(Calendar.MONTH);
                 int yearRetreived = c.get(Calendar.YEAR);
+                                
+                
+                /*
+                
+                WORK ON IF A SHIFT OVERLAPS TWO DAYS!!!
+                
+                
+                */
+                
                 
                 //if the days are the same we want to return all this badgeid's punches
                 //punch takes badgeid, terminalid, and punchtypeid

@@ -1,11 +1,10 @@
 package tasproject;
 
 /*
- * Tanner & Nathan
+ * @author Tanner & Nathan & Matthew
  * Punch.java
  * Mar 2, 2018
  */
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author Matthew
+ * @author Matthew & Maddie
  */
 public class TASLogic {
     
